@@ -1,10 +1,10 @@
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
 # ColmanDevClub-New-Website (frontend: Vite + React 19 + TS, Tailwind + shadcn/ui)
-language: "en-US"
-tone_instructions: "Be direct. Cite the project rule a comment is based on."
+language: 'en-US'
+tone_instructions: 'Be direct. Cite the project rule a comment is based on.'
 
 reviews:
-  profile: "assertive"
+  profile: 'assertive'
   request_changes_workflow: false # only leads approve (CODEOWNERS); CodeRabbit just comments
   high_level_summary: true
   poem: false
@@ -12,19 +12,19 @@ reviews:
     enabled: true
     drafts: false
     ignore_title_keywords:
-      - "deps"
+      - 'deps'
   path_filters:
-    - "!pnpm-lock.yaml"
-    - "!dist/**"
-    - "!public/fonts/**"
+    - '!pnpm-lock.yaml'
+    - '!dist/**'
+    - '!public/fonts/**'
 
   path_instructions:
-    - path: "**"
+    - path: '**'
       instructions: |
         - No hardcoded secrets, API keys or tokens. Only VITE_* public values may reach the client bundle.
         - Never log PII (emails, phone numbers, tokens, mentor notes) to the console.
 
-    - path: "src/**/*.{ts,tsx,css}"
+    - path: 'src/**/*.{ts,tsx,css}'
       instructions: |
         - RTL: logical Tailwind classes only (ms-/me-, ps-/pe-, start-/end-, text-start/text-end,
           rounded-s/e, border-s/e). Flag ml-, mr-, pl-, pr-, left-, right-, text-left, text-right,
@@ -32,7 +32,7 @@ reviews:
         - Wrap English terms inside Hebrew text in <bdi>; emails, URLs, phone numbers and code get dir="ltr".
         - Colors, radii and fonts come from the Tailwind theme tokens (DESIGN §4.2); flag raw hex values and arbitrary values like text-[#123456].
 
-    - path: "src/{pages,features,components}/**"
+    - path: 'src/{pages,features,components}/**'
       instructions: |
         - Server state only through TanStack Query hooks in src/features/; no fetch/axios calls inside components.
         - All API calls go through the shared axios client in src/lib/ (adds X-CDC-Request and the /api/v1 base).
@@ -42,22 +42,22 @@ reviews:
         - Route guards (RequireRole) are UX only; never treat hiding UI as a permission check.
         - Member screens must never show attendance, absences, notes or member status.
 
-    - path: "src/components/**"
+    - path: 'src/components/**'
       instructions: |
         - Accessible by keyboard with a visible focus ring; prefer Radix/shadcn primitives over custom div buttons.
         - Animations only on transform/opacity and disabled under prefers-reduced-motion.
 
-    - path: "src/schemas/**"
+    - path: 'src/schemas/**'
       instructions: "These are copies of the server's zod schemas (ColmanDevClub-Server is authoritative). Flag changes that aren't mirrored from the server."
 
-    - path: "**/*.test.{ts,tsx}"
-      instructions: "UI tests include a vitest-axe check."
+    - path: '**/*.test.{ts,tsx}'
+      instructions: 'UI tests include a vitest-axe check.'
 
   pre_merge_checks:
     custom_checks:
-      - name: "Jira key"
-        mode: "warning"
-        instructions: "The PR description should include a Jira key in the form KAN-<n>."
+      - name: 'Jira key'
+        mode: 'warning'
+        instructions: 'The PR description should include a Jira key in the form KAN-<n>.'
 
 chat:
   auto_reply: true

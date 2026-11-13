@@ -5,12 +5,14 @@ tone_instructions: "Be direct. Cite the project rule a comment is based on."
 
 reviews:
   profile: "assertive"
-  request_changes_workflow: false   # only leads approve (CODEOWNERS); CodeRabbit just comments
+  request_changes_workflow: false # only leads approve (CODEOWNERS); CodeRabbit just comments
   high_level_summary: true
   poem: false
   auto_review:
     enabled: true
     drafts: false
+    ignore_title_keywords:
+      - "deps"
   path_filters:
     - "!pnpm-lock.yaml"
     - "!dist/**"

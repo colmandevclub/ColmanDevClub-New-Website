@@ -16,7 +16,8 @@
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test:browser": "playwright test"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.3.0",
@@ -39,6 +40,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.65.1",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@types/node": "^24.19.2",

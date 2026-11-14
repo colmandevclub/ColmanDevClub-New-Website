@@ -54,6 +54,7 @@ Vitest uses jsdom and Testing Library for React; the ESLint rule tests use Node.
   page styles, button variants, theme tokens and the local API target, in separate
   files by topic. Import constants directly from the relevant file.
 - `src/test/`: shared test setup. Tests live beside the code they cover.
+- `tests/`: Node-only theme contract tests and browser verification fixtures.
 - `tools/eslint/`: the local RTL lint rule and its regression tests.
 - Import source modules through `@/`, which resolves to `src/` in TypeScript,
   Vite and Vitest.
@@ -87,6 +88,10 @@ and code.
 and `src/constants/locale.ts` in both development and production. Edit these
 constants to change the title, favicon, root element, language or direction.
 CSS theme values live in `src/constants/theme.css`, imported by `src/index.css`.
+See [the theme note](docs/theme.md) for token names, focus behavior, visual
+evidence and the S-0.7 font/gallery handoff. Run `pnpm test:browser` for the
+R-34/R-42 desktop and 360 px browser checks (first run:
+`pnpm exec playwright install chromium`).
 Test fixtures and expected values remain explicit so tests independently verify
 the application's behavior.
 

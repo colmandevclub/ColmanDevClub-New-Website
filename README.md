@@ -122,6 +122,6 @@ fallback belong to S-0.4; the API proxy here applies to development.
 ## Docs
 
 - [CLAUDE.md](CLAUDE.md): project rules for people and AI agents
-- Specs: [REQUIREMENTS](docs/specs/REQUIREMENTS.md) · [DESIGN](docs/specs/DESIGN.md) · [TASKS](docs/specs/TASKS.md) · [Reconciliation 2026-11-14](docs/specs/reconciliation-2026-11-14.md)
+- Specs, one folder per epic plus `core/`: [index](docs/specs/README.md) · [core requirements](docs/specs/core/requirements.md) · [core design](docs/specs/core/design.md) · [changelog](docs/specs/CHANGELOG.md) · [reconciliation 2026-11-14](docs/specs/reconciliation-2026-11-14.md)
 - [Onboarding guide](docs/onboarding.html) (Hebrew, open locally in a browser)
 - [How we work (SDD)](docs/sdd/README.md) · [Worked example](docs/sdd/example-R-20.4.md) · [Templates](docs/sdd/templates/)

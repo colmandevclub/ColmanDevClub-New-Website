@@ -1,4 +1,4 @@
-<!-- Goes into docs/specs/TASKS.md under its epic, and the same text into the Jira story description (project KAN). Max 8 points; split anything bigger. -->
+<!-- Goes into docs/specs/<epic>/tasks.md of its epic, and the same text into the Jira story description (project KAN). Max 8 points; split anything bigger. -->
 
 ### S-#.# <Imperative title>
 
@@ -14,7 +14,7 @@
 - [ ] <"Screen as in the design" when there is a UI part>
 
 <!--
-Every story also meets the Definition of Done in TASKS.md (CI green, a test per criterion,
+Every story also meets the Definition of Done in docs/specs/README.md (CI green, a test per criterion,
 keyboard + vitest-axe, 360 px, design screenshots, OpenAPI registration); don't repeat it here.
 In Jira: attach the Claude Design screenshots for the screen, put the S-#.# in the summary,
 and add the story to its epic.

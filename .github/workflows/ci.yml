@@ -33,5 +33,9 @@ jobs:
         run: pnpm format:check
       - name: Test
         run: pnpm test
+      - name: Install browser
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Theme browser tests
+        run: pnpm test:browser
       - name: Build
         run: pnpm build # tsc -b && vite build

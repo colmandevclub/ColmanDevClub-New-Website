@@ -1,0 +1,42 @@
+[
+  {
+    "variant": "default",
+    "normal": 5.695649265559623,
+    "hover": 7.3201687579567825
+  },
+  {
+    "variant": "secondary",
+    "normal": 6.387868889408638,
+    "hover": 5.695107142836196
+  },
+  {
+    "variant": "outline",
+    "normal": 16.49854567755436,
+    "hover": 15.56886311180469
+  },
+  {
+    "variant": "ghost",
+    "normal": 17.209846255303475,
+    "hover": 15.56886311180469
+  },
+  {
+    "variant": "destructive",
+    "normal": 6.258377790018163,
+    "hover": 5.305248997086225
+  },
+  {
+    "variant": "link",
+    "normal": 5.695649265559623,
+    "hover": 5.695649265559623
+  },
+  {
+    "variant": "default",
+    "normal": 5.695649265559623,
+    "hover": 7.3201687579567825
+  },
+  {
+    "variant": "default",
+    "normal": 5.695649265559623,
+    "hover": 7.3201687579567825
+  }
+]

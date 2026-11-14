@@ -32,7 +32,8 @@ _Candidates register, mentors evaluate, admins decide._
 - [ ] `GET /public/assessment-days` returns only open days that aren't full
 - [ ] `POST /public/applications` requires a valid Turnstile token and an empty honeypot; 5/h per IP
 - [ ] With a day: status Registered, capacity enforced atomically. Without an open day: status Waitlisted
-- [ ] Same email in the same admission year updates the existing application
+- [ ] Same email in the same admission year changes nothing and returns the same response; the address gets a confirmation link, and `POST /public/applications/confirm-update` applies the change (R-04.6, D34)
+- [ ] Re-registering or confirming the same day doesn't change its count; switching days moves one place from the old day to the new one in one transaction
 - [ ] Finds or creates a password-less Applicant account
 - [ ] Sends the confirmation email with a set-password link
 

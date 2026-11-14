@@ -5,7 +5,7 @@
 | **Status**        | Draft v0.4                                                                                                                        |
 | **Date**          | 2026-11-14                                                                                                                        |
 | **Method**        | Spec-Driven Development (SDD): **phase 2, design**                                                                                |
-| **Implements**    | `REQUIREMENTS.md` **v1.0 (approved)** (requirement IDs `R-xx`, requirement decisions `Dxx`)                                       |
+| **Implements**    | `REQUIREMENTS.md` **v1.1 (approved)** (requirement IDs `R-xx`, requirement decisions `Dxx`)                                       |
 | **Next artifact** | `tasks.md`: implementation plan, each task traced to `R-xx` and to a section of this document                                     |
 | **Visual design** | Claude Design artifact "ColmanDevClub — Website" (D18). This document covers the technical design. The visual design lives there. |
 
@@ -211,7 +211,7 @@ isAdmin(u)
 isMentorOfYear(u, yearId) // yearMemberships: { userId, yearId, role: 'mentor' }
 canEditWeekContent(u, week) // isAdmin || week.mentorIds.includes(u.id)   (R-16.6, D20)
 canManageMaterials(u, yearId) // isAdmin || isMentorOfYear(u, yearId) — any week of that year (R-18.1, D28)
-canViewMaterial(u, m) // admin | mentor of year | (member of year && m.visibility === 'published')
+canViewMaterial(u, m) // admin | mentor of year | (any mentor && year archived, read-only, R-17.1) | (member of year && m.visibility === 'published')
 canSeeApplicantContact(u) // isAdmin only (R-44.2)
 canSeeTracking(u, yearId) // isAdmin || isMentorOfYear (R-44.3); members never (R-32.2)
 ```
@@ -230,7 +230,7 @@ All collections have `createdAt` and `updatedAt`. `ObjectId` references are show
 | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- | ------------------------ |
 | **users**           | `email` (lowercased), `passwordHash?`, `googleId?`, `emailVerified`, `role` (`applicant\|member\|mentor\|admin`), `status` (`active\|deactivated`), `tv` (token version), `profile { fullName, photoKey?, title?, fieldOfStudy?, schoolYear?, links { linkedin?, github?, website? } }`, `materialsSeenAt?` | `email` unique; `googleId` unique sparse                                | R-07, R-10, R-13, R-20.4 |
 | **sessions**        | `userId → users`, `tokenHash`, `expiresAt`, `revokedAt?`, `replacedBy?`, `userAgent`                                                                                                                                                                                                                        | `tokenHash` unique; TTL on `expiresAt`                                  | T-10                     |
-| **emailTokens**     | `userId`, `type` (`verify\|reset\|set_password`), `tokenHash`, `expiresAt`, `usedAt?`                                                                                                                                                                                                                       | TTL on `expiresAt`                                                      | R-08                     |
+| **emailTokens**     | `userId`, `type` (`verify\|reset\|set_password\|confirm_update`), `payload?` (pending application fields), `tokenHash`, `expiresAt`, `usedAt?`                                                                                                                                                              | TTL on `expiresAt`                                                      | R-08                     |
 | **invites**         | `email`, `role`, `yearId?`, `tokenHash`, `expiresAt` (7 days), `invitedBy`, `acceptedAt?`                                                                                                                                                                                                                   | `tokenHash` unique                                                      | R-07.3, R-13.1           |
 | **academicYears**   | `name`, `startDate`, `endDate`, `weeksCount`, `status` (`draft\|active\|archived`)                                                                                                                                                                                                                          | partial unique on `status: 'active'` (exactly one active, R-14.3)       | R-14                     |
 | **yearMemberships** | `yearId`, `userId`, `role` (`member\|mentor`), `memberStatus? { value: on_track\|needs_attention\|at_risk\|inactive, updatedBy, updatedAt }`                                                                                                                                                                | unique `(yearId, userId)`                                               | R-15, R-23.3, D19        |

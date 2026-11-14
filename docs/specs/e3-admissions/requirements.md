@@ -15,7 +15,7 @@ _As a candidate, I want to register for an assessment day, so that I can be cons
 3. IF a required field is missing or invalid, THEN THE SYSTEM SHALL show an error next to that field and not submit.
 4. WHEN a registration is submitted, THE SYSTEM SHALL confirm it on screen and by email.
 5. WHEN a registration is submitted, THE SYSTEM SHALL create or link an Applicant account for that email.
-6. IF the same email registers again in the same Academic Year, THEN THE SYSTEM SHALL update the existing registration.
+6. IF the same email registers again in the same Academic Year, THEN THE SYSTEM SHALL keep the existing registration unchanged, show the same confirmation as for a new registration, and email that address a confirmation link. WHEN the link is opened, THE SYSTEM SHALL apply the new details to the existing registration (D34).
 7. THE SYSTEM SHALL protect registration from automated spam.
 8. IF no assessment day is open, THEN THE SYSTEM SHALL still accept the registration without a day and set the applicant's status to Waitlisted (D22).
 

@@ -4,7 +4,7 @@ The specs are split by feature: one folder per epic, plus `core/` for the rules 
 
 | Document     | Version                        |
 | ------------ | ------------------------------ |
-| Requirements | **Approved v1.0** (2026-11-13) |
+| Requirements | **Approved v1.1** (2026-11-14) |
 | Design       | Draft v0.4 (2026-11-14)        |
 | Tasks        | 2026-11-14                     |
 
@@ -35,7 +35,7 @@ History of every document: [CHANGELOG.md](CHANGELOG.md). Latest reconciliation: 
 
 ## Planning
 
-Implements REQUIREMENTS v1.0 and DESIGN v0.4. Stage 3 of SDD (requirements → design → tasks).
+Implements REQUIREMENTS v1.1 and DESIGN v0.4. Stage 3 of SDD (requirements → design → tasks).
 
 **Conventions**
 

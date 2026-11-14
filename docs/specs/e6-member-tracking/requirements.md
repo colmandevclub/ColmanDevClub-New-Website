@@ -32,11 +32,12 @@ _As a mentor, I want to see each member's progress, so that I can help the membe
 _As a mentor or admin, I want a one-screen summary of the year, so that I know what needs attention._
 
 1. THE SYSTEM SHALL show key figures for the viewed year: number of members, average attendance rate, the current week, and how many materials are published for the current week.
-2. THE SYSTEM SHALL list the members whose status is Needs attention or At risk (R-23.3).
-3. THE SYSTEM SHALL show the curriculum for the current week and the next week, including mentor and material status.
-4. THE SYSTEM SHALL show recent activity: materials published, absences marked, member status changes.
-5. WHILE a Mentor is signed in, THE SYSTEM SHALL emphasize the weeks they teach and their pending actions (e.g. a week without materials). Absence marking SHALL NOT be shown as a pending action.
-6. THE SYSTEM SHALL show pending applicants.
+2. _Retired: attendance trend chart (D27)._
+3. THE SYSTEM SHALL list the members whose status is Needs attention or At risk (R-23.3).
+4. THE SYSTEM SHALL show the curriculum for the current week and the next week, including mentor and material status.
+5. THE SYSTEM SHALL show recent activity: materials published, absences marked, member status changes.
+6. WHILE a Mentor is signed in, THE SYSTEM SHALL emphasize the weeks they teach and their pending actions (e.g. a week without materials). Absence marking SHALL NOT be shown as a pending action.
+7. THE SYSTEM SHALL show pending applicants.
 
 #### R-28 Members list — **Must**
 

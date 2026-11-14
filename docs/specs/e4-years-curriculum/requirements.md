@@ -26,9 +26,10 @@ _As an Admin, I want to plan who teaches what in each week, so that the whole ye
 
 1. THE SYSTEM SHALL present the year's weeks numbered from 1 to N.
 2. THE SYSTEM SHALL let an Admin set, for each week, one or more teaching mentors and the session date (D20).
-3. THE SYSTEM SHALL show each mentor the weeks they teach.
-4. THE SYSTEM SHALL indicate which weeks have no mentor or no published materials yet.
-5. THE SYSTEM SHALL let the mentors assigned to a week, and Admins, set that week's topic and short description (D20).
+3. _Retired: moving a week (D28)._
+4. THE SYSTEM SHALL show each mentor the weeks they teach.
+5. THE SYSTEM SHALL indicate which weeks have no mentor or no published materials yet.
+6. THE SYSTEM SHALL let the mentors assigned to a week, and Admins, set that week's topic and short description (D20).
 
 ### G. Management dashboard (Mentor & Admin)
 

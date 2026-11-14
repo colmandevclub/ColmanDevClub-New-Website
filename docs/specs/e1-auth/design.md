@@ -8,11 +8,11 @@
 
 ### 5.1 Tokens and cookies
 
-|          | Access token                                          | Refresh token                                                               |
-| -------- | ----------------------------------------------------- | --------------------------------------------------------------------------- |
-| Format   | JWT (HS256), claims `{ sub, role, tv }`               | Random 256-bit opaque value. Only its SHA-256 hash is stored in `sessions`. |
-| Lifetime | 15 min                                                | 30 days, rotated on every use                                               |
-| Cookie   | `cdc_at`; `HttpOnly; Secure; SameSite=Lax; Path=/api` | `cdc_rt`; `HttpOnly; Secure; SameSite=Lax; Path=/api/v1/auth/refresh`       |
+|          | Access token                                          | Refresh token                                                                                   |
+| -------- | ----------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Format   | JWT (HS256), claims `{ sub, role, tv }`               | Random 256-bit opaque value. Only its SHA-256 hash is stored in `sessions`.                     |
+| Lifetime | 15 min                                                | 30 days, rotated on every use                                                                   |
+| Cookie   | `cdc_at`; `HttpOnly; Secure; SameSite=Lax; Path=/api` | `cdc_rt`; `HttpOnly; Secure; SameSite=Lax; Path=/api/v1/auth` (sent to refresh and logout only) |
 
 - **`tv` (token version):** stored on the user. Incremented on role change, deactivation, password reset and "log out everywhere", which invalidates every outstanding access token immediately (R-13.3).
 - **Refresh-token reuse detection:** if a rotated (already used) refresh token is presented, all of that user's sessions are revoked.
@@ -58,7 +58,7 @@ sequenceDiagram
 | Login failure                   | Always "האימייל או הסיסמה שגויים". Rate limit: 5 attempts / 15 min per IP+email, then HTTP 429.                                                               | R-07.4–5         |
 | Verify email                    | Single-use token, 24 h. Required before any role above Applicant takes effect (acceptance waits until verified).                                              | R-08.1           |
 | Password reset                  | Single-use token, 1 h, stored hashed. Bumps `tv`. Neutral response whether or not the email exists.                                                           | R-08.2           |
-| Logout                          | Revokes the session and clears both cookies.                                                                                                                  | R-11.1           |
+| Logout                          | Reads `cdc_rt`, revokes the session whose `tokenHash` matches, and clears both cookies.                                                                       | R-11.1           |
 
 ---
 

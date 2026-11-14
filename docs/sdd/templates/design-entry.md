@@ -1,4 +1,4 @@
-<!-- Use the parts you need. Each goes into the matching section of docs/specs/DESIGN.md, then add the R-IDs to the §15 traceability table. -->
+<!-- Use the parts you need. Each goes into the matching § of the owning epic's docs/specs/<epic>/design.md (shared parts, such as T-xx rows and the §8 data model, into docs/specs/core/design.md), then add the R-IDs to the §15 traceability table in core. -->
 
 ### Technical decision (§2 table row)
 
@@ -29,4 +29,4 @@
 
 | O-x | **<Question>** — waiting on <who> | <Options> | <What it blocks> |
 
-<!-- Bump the DESIGN version and add a changelog row. -->
+<!-- Bump the Design version in docs/specs/README.md and add a row to docs/specs/CHANGELOG.md. -->

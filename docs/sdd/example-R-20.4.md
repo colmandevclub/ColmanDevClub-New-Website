@@ -4,7 +4,7 @@ One real feature taken through every SDD stage. Read it once before your first s
 
 ---
 
-## 1. Requirement (REQUIREMENTS.md)
+## 1. Requirement (`e5-study-materials/requirements.md`)
 
 The requirement already exists as part of R-20:
 
@@ -26,7 +26,7 @@ The requirement can stay as it is. The answers are _how_ decisions, so they belo
 
 ---
 
-## 2. Design (DESIGN.md)
+## 2. Design (`core/design.md` §8)
 
 The existing design already covers most of it:
 
@@ -56,7 +56,7 @@ Then bump DESIGN to the next version, with a changelog row: `R-20.4 rules for fi
 
 ---
 
-## 3. Story (TASKS.md + Jira)
+## 3. Story (`e5-study-materials/tasks.md` + Jira)
 
 R-20.4 is part of the existing story **S-5.5 Member materials library** (R-20.1–R-20.4). Its criterion for this feature is:
 
@@ -174,8 +174,8 @@ router.post(
 
 ### 4.4 Docs in the same PR
 
-- `docs/specs/DESIGN.md`: the §8 note from step 2, a version bump and a changelog row.
-- `docs/specs/TASKS.md`: S-5.5's sharpened criteria from step 3.
+- `docs/specs/core/design.md`: the §8 note from step 2 (the data model is shared, so it lives in core), plus a Design version bump in `docs/specs/README.md` and a row in `docs/specs/CHANGELOG.md`.
+- `docs/specs/e5-study-materials/tasks.md`: S-5.5's sharpened criteria from step 3.
 - Seed script: a member with `materialsSeenAt` set, and one material published after it.
 
 ---

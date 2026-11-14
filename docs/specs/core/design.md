@@ -9,6 +9,8 @@
 | **Next artifact** | `tasks.md`: implementation plan, each task traced to `R-xx` and to a section of this document                                     |
 | **Visual design** | Claude Design artifact "ColmanDevClub — Website" (D18). This document covers the technical design. The visual design lives there. |
 
+> Core of the [spec set](../README.md): rules every feature follows. Feature design live in the epic folders (`e0-…` to `e8-…`); the [index](../README.md#where-things-live) says where each ID lives.
+
 ### Rules for this document
 
 1. Every design element traces to at least one requirement ID. Anything that traces to none is either removed or added to the requirements first.
@@ -177,112 +179,12 @@ Each module contains `*.routes.ts`, `*.controller.ts` (HTTP only), `*.service.ts
 - **Home redirect after sign-in:** Applicant → `/application`, Member → `/my`, Mentor/Admin → `/dashboard` (R-11.1).
 - **Tab titles:** a `useTitle()` hook sets `document.title` per route (R-06.2).
 
-### 4.2 Design tokens → Tailwind (T-03)
-
-Extracted from the Claude Design source files:
-
-| Token                   | Value                                                         | Tailwind name                         |
-| ----------------------- | ------------------------------------------------------------- | ------------------------------------- |
-| Page background         | `#FAFAFB`                                                     | `bg-page`                             |
-| Surface                 | `#FFFFFF`                                                     | `bg-surface`                          |
-| Subtle surface          | `#F4F3F6` / `#F7F7F9`                                         | `bg-subtle`, `bg-subtle-2`            |
-| Border                  | `#E7E5EC`, strong `#C9C5D3`                                   | `border-line`, `border-line-strong`   |
-| Text                    | `#1C1A22`, muted `#5E5A6B`                                    | `text-ink`, `text-muted`              |
-| Accent                  | `#6B5BA8`, accent text `#5A4B94`, tint `#F1EEF8`              | `accent`, `accent-ink`, `accent-tint` |
-| Dark band               | `#2E2350`                                                     | `bg-ink-band`                         |
-| Status OK / warn / risk | `#F1EEF8`/`#5A4B94`, `#F8F0E2`/`#80551A`, `#F7E8E6`/`#94382C` | `status-*`                            |
-| Radii                   | 10 / 12 / 16 / 18 / 22 / full                                 | `rounded-*` scale                     |
-| Fonts                   | IBM Plex Sans Hebrew, JetBrains Mono                          | `font-sans`, `font-mono`              |
-
-The design files are the source of truth for these values. Any change happens in the design first, then in `tailwind.config`.
-
-### 4.3 RTL (R-38)
-
-- `<html lang="he" dir="rtl">`.
-- Tailwind **logical** utilities only: `ms-/me-`, `ps-/pe-`, `start-/end-`, `text-start`. CI fails the build if `ml-`, `mr-`, `pl-`, `pr-`, `left-` or `right-` appear in a PR (ESLint rule or grep).
-- Mixed text: English terms are wrapped in `<bdi>`. Emails, URLs, phone numbers and code use `dir="ltr"`.
-
 ### 4.4 Data fetching & state
 
 - **Server state:** TanStack Query only. Query keys live per feature (`['years', id, 'members', filters]`).
 - **Client state:** React state and context only (auth user, selected year). No global store.
 - **Selected year (R-26.2):** kept in the URL (`?year=<id>`) so it survives reloads. Defaults to the active year.
 - **Optimistic updates** for absence toggles and status changes, with rollback on error (R-37.4).
-
-### 4.5 UX patterns (R-35, R-37, R-42)
-
-- **Loading:** every query-driven list or widget has a skeleton variant (`<XSkeleton/>`) rendered while `isPending` (R-37.1).
-- **Empty:** `<EmptyState title action />` on every list, with the next action (R-37.2).
-- **Destructive actions:** `<ConfirmDialog>` for deletes. `<UndoToast>` for reversible actions such as removing an absence or unpublishing (R-37.3).
-- **Motion:** route transitions and scroll reveals through `motion`. All motion is disabled when `prefers-reduced-motion` is set (R-35.3). Only `transform` and `opacity` are animated, so there's no layout shift (R-35.2).
-- **Accessibility:** Radix primitives handle focus and ARIA. A global focus ring token is used. `eslint-plugin-jsx-a11y` runs in lint, and `vitest-axe` runs in component tests (R-42).
-
-### 4.6 Performance (R-41)
-
-- Route-level code splitting: the public pages, the member area and the dashboard are separate chunks. A public visitor never downloads dashboard code.
-- The hero 3D scene loads lazily, after first paint, behind `requestIdleCallback`, and has a static fallback image.
-- Images: AVIF/WebP with explicit width and height.
-- **Budget:** public entry chunk ≤ 150 KB gzip. Lighthouse CI runs on the PR preview URL (§14).
-
----
-
-## 5. Authentication (R-07, R-08, R-12, T-10)
-
-### 5.1 Tokens and cookies
-
-|          | Access token                                          | Refresh token                                                               |
-| -------- | ----------------------------------------------------- | --------------------------------------------------------------------------- |
-| Format   | JWT (HS256), claims `{ sub, role, tv }`               | Random 256-bit opaque value. Only its SHA-256 hash is stored in `sessions`. |
-| Lifetime | 15 min                                                | 30 days, rotated on every use                                               |
-| Cookie   | `cdc_at`; `HttpOnly; Secure; SameSite=Lax; Path=/api` | `cdc_rt`; `HttpOnly; Secure; SameSite=Lax; Path=/api/v1/auth/refresh`       |
-
-- **`tv` (token version):** stored on the user. Incremented on role change, deactivation, password reset and "log out everywhere", which invalidates every outstanding access token immediately (R-13.3).
-- **Refresh-token reuse detection:** if a rotated (already used) refresh token is presented, all of that user's sessions are revoked.
-- Cookies are **first-party**, because the browser reaches the API through the web app's own domain (T-19). This holds on the `.vercel.app` domain and on a custom domain later (O-4).
-
-### 5.2 CSRF
-
-- `SameSite=Lax` already stops other sites from sending the cookies on POST/PUT/PATCH/DELETE.
-- Defense in depth: state-changing requests must also carry a custom header `X-CDC-Request: 1` and an `Origin` matching the site. A cross-origin page can't add the header without a CORS preflight, and the API allows no cross-origin requests.
-- axios adds the header to every request.
-
-### 5.3 Flows
-
-```mermaid
-sequenceDiagram
-  participant B as Browser (SPA)
-  participant A as API
-  participant G as Google
-  Note over B,A: Email + password
-  B->>A: POST /auth/login {email, password}
-  A->>A: rate limit, argon2 verify, status active?
-  A-->>B: Set-Cookie cdc_at, cdc_rt + {user}
-  Note over B,A: Google
-  B->>G: Google Identity Services button
-  G-->>B: ID token (JWT)
-  B->>A: POST /auth/google {idToken}
-  A->>G: verify signature, aud, email_verified
-  A->>A: find user by googleId or email, link or create (Applicant)
-  A-->>B: Set-Cookie cdc_at, cdc_rt
-  Note over B,A: Silent refresh
-  B->>A: any request → 401 (access expired)
-  B->>A: POST /auth/refresh (cdc_rt cookie)
-  A-->>B: new cdc_at + rotated cdc_rt
-  B->>A: retry original request
-```
-
-| Flow                            | Behavior                                                                                                                                                      | Requirement      |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| Sign up (email)                 | Creates an Applicant with `emailVerified=false` and sends a verification email.                                                                               | R-07.1–2, R-08.1 |
-| Sign up via invite              | `/invite/:token`: the email is fixed from the invite. Role and year are taken from the invite. The invite is marked accepted.                                 | R-07.3           |
-| Registration creates an account | `POST /public/applications` creates or links a password-less Applicant user. The confirmation email includes a "set password" link (same mechanism as reset). | R-04.5           |
-| Google                          | Links to an existing account when the emails match and Google says `email_verified`. Otherwise creates an Applicant.                                          | R-07.1           |
-| Login failure                   | Always "האימייל או הסיסמה שגויים". Rate limit: 5 attempts / 15 min per IP+email, then HTTP 429.                                                               | R-07.4–5         |
-| Verify email                    | Single-use token, 24 h. Required before any role above Applicant takes effect (acceptance waits until verified).                                              | R-08.1           |
-| Password reset                  | Single-use token, 1 h, stored hashed. Bumps `tv`. Neutral response whether or not the email exists.                                                           | R-08.2           |
-| Logout                          | Revokes the session and clears both cookies.                                                                                                                  | R-11.1           |
-
----
 
 ## 6. API design
 
@@ -297,95 +199,7 @@ sequenceDiagram
 
 ### 6.2 Endpoints
 
-**Auth & account**
-
-| Method      | Path                                              | Access         | Requirements |
-| ----------- | ------------------------------------------------- | -------------- | ------------ |
-| POST        | `/auth/signup`                                    | Guest          | R-07         |
-| POST        | `/auth/login`                                     | Guest          | R-07         |
-| POST        | `/auth/google`                                    | Guest          | R-07         |
-| POST        | `/auth/refresh`                                   | Refresh cookie | T-10         |
-| POST        | `/auth/logout`                                    | Signed-in      | R-11         |
-| POST        | `/auth/verify-email`, `/auth/resend-verification` | —              | R-08.1       |
-| POST        | `/auth/forgot-password`, `/auth/reset-password`   | —              | R-08.2       |
-| GET         | `/auth/me`                                        | Signed-in      | R-11         |
-| GET / POST  | `/invites/:token`, `/invites/:token/accept`       | Guest          | R-07.3       |
-| GET / PATCH | `/me/profile`                                     | Signed-in      | R-10         |
-| POST        | `/me/photo-upload-url`                            | Signed-in      | R-10         |
-| DELETE      | `/me`                                             | Member         | R-44.6       |
-| GET         | `/me/application`                                 | Applicant      | R-09         |
-| GET         | `/me/week`                                        | Member         | R-32         |
-
-**Public**
-
-| Method | Path                                               | Requirements   |
-| ------ | -------------------------------------------------- | -------------- |
-| GET    | `/public/assessment-days` (open and not full only) | R-04.2         |
-| GET    | `/public/form-options`                             | R-04.1, R-29.2 |
-| POST   | `/public/applications` (Turnstile token required)  | R-04           |
-| GET    | `/public/mentors` (grouped by year, newest first)  | R-03           |
-
-**Years & curriculum**
-
-| Method              | Path                                                                                                              | Access                                    | Requirements        |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------- | ------------------- |
-| GET                 | `/years`                                                                                                          | Mentor (assigned + archived), Admin       | R-26.2, R-17.1      |
-| POST                | `/years`                                                                                                          | Admin                                     | R-14.1              |
-| PATCH               | `/years/:id` (name, dates, week count)                                                                            | Admin                                     | R-14.1–2            |
-| POST                | `/years/:id/activate`, `/years/:id/archive`                                                                       | Admin                                     | R-14.3–4            |
-| GET / POST / DELETE | `/years/:id/mentors[/:userId]`                                                                                    | Admin                                     | R-15                |
-| GET                 | `/years/:id/weeks`                                                                                                | Mentor (assigned or archived year), Admin | R-16.1, R-16.5      |
-| PATCH               | `/weeks/:id` (Admin: `mentorIds`, `sessionDate`, `topic`, `description`. Assigned mentor: `topic`, `description`) | per field                                 | R-16.2, R-16.6, D28 |
-| GET                 | `/years/:id/overview` (no trend series, D27)                                                                      | Mentor (assigned), Admin                  | R-27                |
-| GET                 | `/search?q=&yearId=`                                                                                              | Mentor, Admin                             | R-26.3              |
-
-**Materials**
-
-| Method         | Path                                                                                                                | Access                        | Requirements           |
-| -------------- | ------------------------------------------------------------------------------------------------------------------- | ----------------------------- | ---------------------- |
-| GET            | `/years/:id/materials?q=` (members: published only; mentors-only items hidden)                                      | Member of year, Mentor, Admin | R-20                   |
-| POST           | `/materials/upload-url` `{ fileName, mime, size }` → `{ uploadUrl, fileKey }`                                       | Mentor of the year, Admin     | R-18.4                 |
-| POST           | `/weeks/:id/materials` (any week of the year)                                                                       | Mentor of the year, Admin     | R-18, D28              |
-| PATCH / DELETE | `/materials/:id`                                                                                                    | Mentor of the year, Admin     | R-18, R-19             |
-| GET            | `/materials/:id/download` → 302 to a signed URL (5 min) + records a view                                            | Permitted viewers             | R-19.3, R-20.3, R-23.1 |
-| GET            | `/materials/:id/open` → 302 to the external link + records a view                                                   | Permitted viewers             | R-20.3, R-23.1         |
-| POST           | `/me/materials/seen` (updates the "last visit" time)                                                                | Member                        | R-20.4                 |
-| POST           | `/years/:id/import` `{ sourceYearId, items: [{ weekNumber, materialIds? }], targetWeekNumber? , wholeCurriculum? }` | Mentor (assigned), Admin      | R-17.2–3               |
-
-**Tracking**
-
-| Method       | Path                                      | Access                   | Requirements   |
-| ------------ | ----------------------------------------- | ------------------------ | -------------- |
-| GET          | `/years/:id/members?status=&sort=&q=`     | Mentor (assigned), Admin | R-28           |
-| GET          | `/years/:id/members/:userId`              | Mentor (assigned), Admin | R-23.4         |
-| PATCH        | `/years/:id/members/:userId/status`       | Mentor (assigned), Admin | R-23.3         |
-| POST         | `/years/:id/members/:userId/notes`        | Mentor (assigned), Admin | R-23.2         |
-| GET          | `/weeks/:id/absences`                     | Mentor (assigned), Admin | R-22           |
-| PUT / DELETE | `/weeks/:id/absences/:userId` `{ note? }` | Mentor (assigned), Admin | R-22.1, R-22.4 |
-
-**Admissions**
-
-| Method                      | Path                                                               | Access        | Requirements   |
-| --------------------------- | ------------------------------------------------------------------ | ------------- | -------------- |
-| GET / POST / PATCH          | `/assessment-days[/:id]`                                           | Admin         | R-29.1         |
-| GET / POST / PATCH / DELETE | `/form-options[/:id]`                                              | Admin         | R-29.2         |
-| GET                         | `/applications?status=&dayId=&q=` (contact fields only for Admins) | Mentor, Admin | R-29.3, R-44.2 |
-| PUT                         | `/applications/:id/evaluations/me` `{ score 1–5, notes }`          | Mentor, Admin | R-29.3         |
-| PATCH                       | `/applications/:id/status` `{ accepted \| not_accepted }`          | Admin         | R-29.4–5       |
-| POST                        | `/applications/assign-day` `{ applicationIds, dayId }`             | Admin         | R-29.7         |
-| GET                         | `/applications/export.csv`                                         | Admin         | R-29.6         |
-
-**Users**
-
-| Method | Path                                    | Access | Requirements |
-| ------ | --------------------------------------- | ------ | ------------ |
-| GET    | `/users?role=&yearId=&status=&q=`       | Admin  | R-13.5       |
-| POST   | `/invites` `{ emails[], role, yearId }` | Admin  | R-13.1       |
-| PATCH  | `/users/:id/role`, `/users/:id/status`  | Admin  | R-13.2–3     |
-| DELETE | `/users/:id`                            | Admin  | R-44.4       |
-| GET    | `/audit-log?entity=&actorId=`           | Admin  | R-13.4       |
-
----
+Endpoints are listed in the `design.md` of the epic that owns their requirement, under this same heading and group labels. See the [spec index](../README.md#where-things-live).
 
 ## 7. Authorization (R-12)
 
@@ -440,63 +254,6 @@ All collections have `createdAt` and `updatedAt`. `ObjectId` references are show
 - **Week flags (R-16.5):** `mentorIds` is empty, or the week has no `published` material.
 
 **Applicants join which year?** The _active_ year at the time of acceptance (R-29.5). On acceptance: `user.role = member`, `yearMemberships.insert({ role: 'member' })`, and an audit log entry. If the user isn't email-verified yet, the membership is created but member access waits for verification (R-08.1).
-
----
-
-## 9. Key business flows
-
-### 9.1 Registration → Waitlisted / Registered (R-04, R-29.7, D22)
-
-1. `POST /public/applications` with the Turnstile token and the honeypot field, rate-limited to 5/h per IP.
-2. Validate with zod. Find or create the password-less Applicant user (R-04.5).
-3. If `assessmentDayId` is present → check the day is open and `registeredCount < capacity`, using an atomic `$inc` with a condition → `status: registered`. Otherwise → `status: waitlisted` (R-04.8).
-4. Upsert on `(admissionYearId, email)` (R-04.6).
-5. Send the confirmation email with a "set password" link (R-04.4).
-6. Later, an Admin assigns waitlisted applicants to a day → `registered` (R-29.7).
-
-### 9.2 Reuse from an earlier year (R-17)
-
-- Copies week `topic` and `description`, and/or selected materials, into the target year's weeks.
-- Copied materials get `copiedFromId`, `authorId = <copier>` and `visibility: draft` (as in the design).
-- **Files:** stored objects are **immutable** (a replaced file always gets a new key). So a copy reuses the same `fileKey`, and editing the copy never changes the original (R-17.3). A file object is deleted only when no material references its key any more.
-
-### 9.3 Deleting a user (R-44.4, R-44.6)
-
-Runs in a transaction:
-
-1. Delete: `sessions`, `emailTokens`, `invites` for the email, `materialViews`, `absences`, `memberNotes` about the user, `applications`, `yearMemberships`, and the profile photo object.
-2. Keep materials authored by the user, with `authorId` pointing to a tombstone "משתמש/ת שנמחק/ה" (R-15.2 spirit).
-3. Delete the `users` document itself.
-4. Rewrite earlier `auditLogs` entries to replace the user's id with the tombstone, and add one log entry with no personal data.
-
-A Member deletes themselves from `/profile` after typing a confirmation phrase. An Admin deletes from `/dashboard/users`.
-
----
-
-## 10. File storage (R-18.4, R-19.3) — Cloudinary (T-21)
-
-```ts
-interface StorageService {
-  createUploadUrl(
-    key: string,
-    mime: string,
-    maxBytes: number,
-  ): Promise<{ url: string; fields?: Record<string, string> }>
-  createDownloadUrl(
-    key: string,
-    fileName: string,
-    ttlSeconds: number,
-  ): Promise<string>
-  delete(key: string): Promise<void>
-}
-```
-
-- **Provider:** one Cloudinary account (cloud set up in S-0.5 on the club Gmail). Material files are stored with delivery type **`authenticated`** (never `upload`/public), under the folders `materials/` and `avatars/`. PDF and ZIP delivery is enabled in the account's security settings. Only the API holds `CLOUDINARY_API_SECRET` (a Vercel env var). The browser only ever receives short-lived signed upload parameters and signed URLs.
-- **Upload:** the API validates mime and size (allow-list: PDF, PNG/JPG, ZIP, PPTX/DOCX; **max 10 MB**, the free-plan per-file limit) → returns signed upload parameters (signature, timestamp, `public_id`, `type: authenticated`) → the browser uploads directly to Cloudinary → the client calls `POST /weeks/:id/materials` with the `fileKey` (`public_id`) → the API checks through the Admin API that the asset exists and its size matches. A file over 10 MB gets the clear error from R-18.4 before any upload starts.
-- **Download:** `GET /materials/:id/download` → permission check → audit view → 302 to a signed, expiring URL valid for 5 minutes. Assets are **private**, with no public delivery URL (R-19.3).
-- **Keys (`public_id`):** `materials/<uuid>/<sanitized-file-name>`, `avatars/<userId>/<uuid>`.
-- **Recordings** are added as links (unlisted YouTube or Drive), not uploaded. Video files aren't on the allow-list, so the free plan's storage and bandwidth credits stay enough for documents.
-- **Local development:** a filesystem adapter implements the same interface, so no Cloudinary keys are needed to run locally.
 
 ---
 
@@ -616,12 +373,3 @@ interface EmailService {
 | O-5 | ~~Account ownership~~ | Resolved (S-0.11 / KAN-61): the club Gmail owns or administers Vercel, MongoDB Atlas, Cloudinary, Cloudflare, Google sign-in and the club mailbox, so no service depends on a student's personal account | —      |
 
 ---
-
-## Changelog
-
-| Version | Changes                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| v0.4    | Reconciled with completed Sprint 1 work (S-0.22 / KAN-114; see `reconciliation-2026-11-14.md`). T-21 and §10 switched from Supabase to the owner-confirmed Cloudinary setup with a 10 MB per-file limit (private assets, short-lived signed downloads and the local adapter kept). Added T-23 (OpenAPI), T-24 (CodeRabbit) and T-25 (review rule). Resolved O-4 (stay on `.vercel.app`) and added and resolved O-5 (club Gmail owns the services). §14 updated. |
-| v0.3    | Aligned with approved requirements v1.0: partners removed, drag-and-drop note removed, app-level HTTPS enforcement + at-rest encryption (R-44.1, R-44.7).                                                                                                                                                                                                                                                                                                       |
-| v0.2    | Resolved hosting (Vercel for web + API, same origin), storage (Supabase), email (Gmail SMTP). Cookies switched to `SameSite=Lax`, CORS removed. Removed the chart (D27), week moving (D28) and retention cleanup (D29). Mentors manage materials for any week of their year. MP4 uploads dropped.                                                                                                                                                               |
-| v0.1    | First full design from the decisions of 2026-11-12/13.                                                                                                                                                                                                                                                                                                                                                                                                          |

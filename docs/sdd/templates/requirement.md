@@ -1,4 +1,4 @@
-<!-- Copy into docs/specs/REQUIREMENTS.md §5 under the right group. Take the next free R number; never reuse a retired one. -->
+<!-- Copy into docs/specs/<epic>/requirements.md of the epic that will build it, under the right group (into docs/specs/core/requirements.md if every feature must follow it). Take the next free R number; never reuse a retired one. -->
 
 #### R-xx <Short name> — **Must**
 

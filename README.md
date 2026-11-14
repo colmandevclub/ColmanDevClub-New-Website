@@ -102,3 +102,9 @@ and [RTL guide](https://ui.shadcn.com/docs/rtl/vite).
 The repository's GitHub Actions workflow runs install, lint, formatting checks,
 tests and build on pull requests. Vercel API rewrites and the production SPA
 fallback belong to S-0.4; the API proxy here applies to development.
+
+## Docs
+
+- [CLAUDE.md](CLAUDE.md): project rules for people and AI agents
+- Specs: [REQUIREMENTS](docs/specs/REQUIREMENTS.md) · [DESIGN](docs/specs/DESIGN.md) · [TASKS](docs/specs/TASKS.md)
+- [How we work (SDD)](docs/sdd/README.md) · [Worked example](docs/sdd/example-R-20.4.md) · [Templates](docs/sdd/templates/)

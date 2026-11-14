@@ -1,6 +1,6 @@
 # ColmanDevClub — TASKS
 
-Implements REQUIREMENTS v1.0 and DESIGN v0.4. Stage 3 of SDD (requirements → design → tasks).
+Implements REQUIREMENTS v1.1 and DESIGN v0.4. Stage 3 of SDD (requirements → design → tasks).
 
 **Conventions**
 
@@ -354,7 +354,8 @@ _Candidates register, mentors evaluate, admins decide._
 - [ ] `GET /public/assessment-days` returns only open days that aren't full
 - [ ] `POST /public/applications` requires a valid Turnstile token and an empty honeypot; 5/h per IP
 - [ ] With a day: status Registered, capacity enforced atomically. Without an open day: status Waitlisted
-- [ ] Same email in the same admission year updates the existing application
+- [ ] Same email in the same admission year changes nothing and returns the same response; the address gets a confirmation link, and `POST /public/applications/confirm-update` applies the change (R-04.6, D34)
+- [ ] Re-registering or confirming the same day doesn't change its count; switching days moves one place from the old day to the new one in one transaction
 - [ ] Finds or creates a password-less Applicant account
 - [ ] Sends the confirmation email with a set-password link
 
@@ -811,3 +812,4 @@ The stories above are the original plan. Jira is the live plan: after the 2026-1
 | Date       | Changes                                                                                                                                                                                                                                                                        |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | 2026-11-14 | S-0.22 (KAN-114): restored to `docs/specs/`; now implements DESIGN v0.4. Storage criteria in S-0.5, S-0.8, S-5.1 and S-8.5 changed from Supabase to Cloudinary (10 MB per file). Added the Jira plan section and T-23 – T-25 traceability. See `reconciliation-2026-11-14.md`. |
+| 2026-11-14 | S-3.2 criteria updated for R-04.6 / D34 (confirm-by-email resubmission, capacity counted once).                                                                                                                                                                                |

@@ -2,7 +2,7 @@
 
 |                    |                                                                                                                                                               |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Status**         | **Approved v1.0** (2026-11-13)                                                                                                                                |
+| **Status**         | **Approved v1.1** (2026-11-14)                                                                                                                                |
 | **Date**           | 2026-11-10                                                                                                                                                    |
 | **Method**         | Spec-Driven Development (SDD): **phase 1, requirements**                                                                                                      |
 | **Next artifacts** | `DESIGN.md` (architecture, data model, tech stack, integrations, UI design, routes, content), then `tasks.md` (implementation plan traced to requirement IDs) |
@@ -54,41 +54,42 @@ ColmanDevClub is the development community of COLMAN. The website:
 
 ### 1.4 Decisions log
 
-| ID  | Decision                                                                                                                                                                                                                                           |
-| --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| D1  | Members don't manage their work on the website.                                                                                                                                                                                                    |
-| D2  | No projects are managed on the website. Mentors upload study materials and see member data such as progress and absences.                                                                                                                          |
-| D3  | An Applicant role exists.                                                                                                                                                                                                                          |
-| D4  | The site is Hebrew now. A second language will be added later for the whole site.                                                                                                                                                                  |
-| D5  | Content is organized per academic year. The Admin creates a year, adds and removes mentors, and assigns what each mentor teaches and in which week (weeks numbered from 1). Mentors and Admins add materials and can take them from earlier years. |
-| D6  | Storage and external integrations are design decisions.                                                                                                                                                                                            |
-| D7  | The current UX/UI and the Figma dashboard are references, not commitments.                                                                                                                                                                         |
-| D8  | "Keep current functionality" means keep the **features**, not the specific routes or content.                                                                                                                                                      |
-| D9  | Groups per mentor apply only from the second semester and are out of scope for now.                                                                                                                                                                |
-| D10 | Members don't mark materials as done. Progress is measured without any member action.                                                                                                                                                              |
-| D11 | Mentors can view and evaluate applicants.                                                                                                                                                                                                          |
-| D12 | Which past projects appear in the showcase is decided later.                                                                                                                                                                                       |
-| D13 | The number of weeks is set per academic year.                                                                                                                                                                                                      |
-| D14 | Announcements are out of scope for now.                                                                                                                                                                                                            |
-| D15 | Members can't see their own attendance.                                                                                                                                                                                                            |
-| D16 | Mentors mark only absences. Marking is optional: a mentor may skip marking for a week. A member who isn't marked absent is considered present.                                                                                                     |
-| D17 | v1 contains Must requirements only. Could and Should items were removed; scheduled publishing of materials was moved to future scope.                                                                                                              |
-| D18 | The design in Claude Design ("ColmanDevClub — Website") is the chosen visual direction. No second concept is required.                                                                                                                             |
-| D19 | Admins don't add or remove members of a year directly. Members join a year by being accepted.                                                                                                                                                      |
-| D20 | The Admin manages the weeks (mentor assignment, session date). Mentors manage the content of the weeks they teach (topic, description); any mentor of the year can add materials to any week (D28).                                                |
-| D21 | There is no page per material. Members download files and open links from the week view.                                                                                                                                                           |
-| D22 | Application statuses are: Waitlisted (applied while no assessment day is open), Registered (applied for an assessment day), Accepted, Not accepted.                                                                                                |
-| D23 | There is no site-content management in the dashboard. Public content (showcase projects, mentors directory details, social links) is maintained in the code.                                                                                       |
-| D24 | Personal data can be deleted from inside the site: an Admin can delete any user, and a member can delete their own account.                                                                                                                        |
-| D25 | One shared link preview (title, description, image) for the whole site is acceptable. Per-page previews and full server-rendered content are not required.                                                                                         |
-| D26 | Readiness for a second language (externalized UI text, mirror-safe layout) is moved to future scope. v1 is Hebrew only.                                                                                                                            |
-| D27 | The attendance-trend chart is out of scope for now.                                                                                                                                                                                                |
-| D28 | There is no "move week" action: the Admin edits a week's content or mentors directly. Any mentor of the year can add materials to any week.                                                                                                        |
-| D29 | Automatic deletion of rejected applicants' data is out of scope for now.                                                                                                                                                                           |
-| D30 | Partner logos are not displayed.                                                                                                                                                                                                                   |
-| D31 | No formal list of supported browsers.                                                                                                                                                                                                              |
-| D32 | Encryption must not depend on the hosting provider: the system itself enforces encrypted connections, and stored data is encrypted at rest.                                                                                                        |
-| D33 | All Must requirements were reviewed and approved on 2026-11-13.                                                                                                                                                                                    |
+| ID  | Decision                                                                                                                                                                                                                                                                                          |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| D1  | Members don't manage their work on the website.                                                                                                                                                                                                                                                   |
+| D2  | No projects are managed on the website. Mentors upload study materials and see member data such as progress and absences.                                                                                                                                                                         |
+| D3  | An Applicant role exists.                                                                                                                                                                                                                                                                         |
+| D4  | The site is Hebrew now. A second language will be added later for the whole site.                                                                                                                                                                                                                 |
+| D5  | Content is organized per academic year. The Admin creates a year, adds and removes mentors, and assigns what each mentor teaches and in which week (weeks numbered from 1). Mentors and Admins add materials and can take them from earlier years.                                                |
+| D6  | Storage and external integrations are design decisions.                                                                                                                                                                                                                                           |
+| D7  | The current UX/UI and the Figma dashboard are references, not commitments.                                                                                                                                                                                                                        |
+| D8  | "Keep current functionality" means keep the **features**, not the specific routes or content.                                                                                                                                                                                                     |
+| D9  | Groups per mentor apply only from the second semester and are out of scope for now.                                                                                                                                                                                                               |
+| D10 | Members don't mark materials as done. Progress is measured without any member action.                                                                                                                                                                                                             |
+| D11 | Mentors can view and evaluate applicants.                                                                                                                                                                                                                                                         |
+| D12 | Which past projects appear in the showcase is decided later.                                                                                                                                                                                                                                      |
+| D13 | The number of weeks is set per academic year.                                                                                                                                                                                                                                                     |
+| D14 | Announcements are out of scope for now.                                                                                                                                                                                                                                                           |
+| D15 | Members can't see their own attendance.                                                                                                                                                                                                                                                           |
+| D16 | Mentors mark only absences. Marking is optional: a mentor may skip marking for a week. A member who isn't marked absent is considered present.                                                                                                                                                    |
+| D17 | v1 contains Must requirements only. Could and Should items were removed; scheduled publishing of materials was moved to future scope.                                                                                                                                                             |
+| D18 | The design in Claude Design ("ColmanDevClub — Website") is the chosen visual direction. No second concept is required.                                                                                                                                                                            |
+| D19 | Admins don't add or remove members of a year directly. Members join a year by being accepted.                                                                                                                                                                                                     |
+| D20 | The Admin manages the weeks (mentor assignment, session date). Mentors manage the content of the weeks they teach (topic, description); any mentor of the year can add materials to any week (D28).                                                                                               |
+| D21 | There is no page per material. Members download files and open links from the week view.                                                                                                                                                                                                          |
+| D22 | Application statuses are: Waitlisted (applied while no assessment day is open), Registered (applied for an assessment day), Accepted, Not accepted.                                                                                                                                               |
+| D23 | There is no site-content management in the dashboard. Public content (showcase projects, mentors directory details, social links) is maintained in the code.                                                                                                                                      |
+| D24 | Personal data can be deleted from inside the site: an Admin can delete any user, and a member can delete their own account.                                                                                                                                                                       |
+| D25 | One shared link preview (title, description, image) for the whole site is acceptable. Per-page previews and full server-rendered content are not required.                                                                                                                                        |
+| D26 | Readiness for a second language (externalized UI text, mirror-safe layout) is moved to future scope. v1 is Hebrew only.                                                                                                                                                                           |
+| D27 | The attendance-trend chart is out of scope for now.                                                                                                                                                                                                                                               |
+| D28 | There is no "move week" action: the Admin edits a week's content or mentors directly. Any mentor of the year can add materials to any week.                                                                                                                                                       |
+| D29 | Automatic deletion of rejected applicants' data is out of scope for now.                                                                                                                                                                                                                          |
+| D30 | Partner logos are not displayed.                                                                                                                                                                                                                                                                  |
+| D31 | No formal list of supported browsers.                                                                                                                                                                                                                                                             |
+| D32 | Encryption must not depend on the hosting provider: the system itself enforces encrypted connections, and stored data is encrypted at rest.                                                                                                                                                       |
+| D33 | All Must requirements were reviewed and approved on 2026-11-13.                                                                                                                                                                                                                                   |
+| D34 | A public resubmission with an email that already has a registration changes nothing until the owner of that email confirms through a link sent to it, so knowing someone's email is not enough to change their registration. Approved by Almog Lavi on 2026-11-14 (CodeRabbit review of KAN-114). |
 
 ---
 
@@ -191,7 +192,7 @@ _As a candidate, I want to register for an assessment day, so that I can be cons
 3. IF a required field is missing or invalid, THEN THE SYSTEM SHALL show an error next to that field and not submit.
 4. WHEN a registration is submitted, THE SYSTEM SHALL confirm it on screen and by email.
 5. WHEN a registration is submitted, THE SYSTEM SHALL create or link an Applicant account for that email.
-6. IF the same email registers again in the same Academic Year, THEN THE SYSTEM SHALL update the existing registration.
+6. IF the same email registers again in the same Academic Year, THEN THE SYSTEM SHALL keep the existing registration unchanged, show the same confirmation as for a new registration, and email that address a confirmation link. WHEN the link is opened, THE SYSTEM SHALL apply the new details to the existing registration (D34).
 7. THE SYSTEM SHALL protect registration from automated spam.
 8. IF no assessment day is open, THEN THE SYSTEM SHALL still accept the registration without a day and set the applicant's status to Waitlisted (D22).
 
@@ -279,9 +280,10 @@ _As an Admin, I want to plan who teaches what in each week, so that the whole ye
 
 1. THE SYSTEM SHALL present the year's weeks numbered from 1 to N.
 2. THE SYSTEM SHALL let an Admin set, for each week, one or more teaching mentors and the session date (D20).
-3. THE SYSTEM SHALL show each mentor the weeks they teach.
-4. THE SYSTEM SHALL indicate which weeks have no mentor or no published materials yet.
-5. THE SYSTEM SHALL let the mentors assigned to a week, and Admins, set that week's topic and short description (D20).
+3. _Retired: moving a week (D28)._
+4. THE SYSTEM SHALL show each mentor the weeks they teach.
+5. THE SYSTEM SHALL indicate which weeks have no mentor or no published materials yet.
+6. THE SYSTEM SHALL let the mentors assigned to a week, and Admins, set that week's topic and short description (D20).
 
 #### R-17 Reuse from earlier years — **Must**
 
@@ -351,11 +353,12 @@ _As a mentor, I want to see each member's progress, so that I can help the membe
 _As a mentor or admin, I want a one-screen summary of the year, so that I know what needs attention._
 
 1. THE SYSTEM SHALL show key figures for the viewed year: number of members, average attendance rate, the current week, and how many materials are published for the current week.
-2. THE SYSTEM SHALL list the members whose status is Needs attention or At risk (R-23.3).
-3. THE SYSTEM SHALL show the curriculum for the current week and the next week, including mentor and material status.
-4. THE SYSTEM SHALL show recent activity: materials published, absences marked, member status changes.
-5. WHILE a Mentor is signed in, THE SYSTEM SHALL emphasize the weeks they teach and their pending actions (e.g. a week without materials). Absence marking SHALL NOT be shown as a pending action.
-6. THE SYSTEM SHALL show pending applicants.
+2. _Retired: attendance trend chart (D27)._
+3. THE SYSTEM SHALL list the members whose status is Needs attention or At risk (R-23.3).
+4. THE SYSTEM SHALL show the curriculum for the current week and the next week, including mentor and material status.
+5. THE SYSTEM SHALL show recent activity: materials published, absences marked, member status changes.
+6. WHILE a Mentor is signed in, THE SYSTEM SHALL emphasize the weeks they teach and their pending actions (e.g. a week without materials). Absence marking SHALL NOT be shown as a pending action.
+7. THE SYSTEM SHALL show pending applicants.
 
 #### R-28 Members list — **Must**
 
@@ -438,8 +441,9 @@ _As a member, I want one place that shows what matters this week, so that I don'
 2. THE SYSTEM SHALL show applicants' phone numbers and emails to Admins only.
 3. THE SYSTEM SHALL show member absences, progress, notes and status only to the Mentors of that year and to Admins.
 4. THE SYSTEM SHALL let an Admin permanently delete a user's personal data on request.
-5. THE SYSTEM SHALL let a Member permanently delete their own account and personal data, after confirming the action (D24).
-6. THE SYSTEM SHALL store its database and uploaded files encrypted at rest (D32).
+5. _Retired: automatic deletion after a retention period (D29)._
+6. THE SYSTEM SHALL let a Member permanently delete their own account and personal data, after confirming the action (D24).
+7. THE SYSTEM SHALL store its database and uploaded files encrypted at rest (D32).
 
 ---
 
@@ -472,6 +476,7 @@ None at the moment. Q1 and Q2 from v0.3 were resolved as D15 and D16.
 
 | Version  | Changes                                                                                                                                                                                                                                                                                                                                                                                             |
 | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **v1.1** | R-04.6: a resubmission with an existing email changes the registration only after the email owner confirms by link (D34). Restored the retired placeholders R-16.3, R-27.2 and R-44.5, so the later criteria keep their original numbers (a formatter had renumbered the lists in the repo copy).                                                                                                   |
 | **v1.0** | **Approved.** Reviewed all Musts with the owner (D33). R-05 now follows the chosen design and routes every join entry point to registration; removed partners (R-05.4, D30), R-33.3, R-37.6, R-43.3 (D31). R-44.1 made host-independent, and R-44.7 added for encryption at rest (D32).                                                                                                             |
 | v0.11    | Removed R-27.2 attendance chart (D27), R-16.3 move week (D28), R-44.5 automatic retention deletion (D29). Mentors can add materials to any week of their year (R-18.1).                                                                                                                                                                                                                             |
 | v0.10    | Moved second-language readiness (R-38.3, R-38.4) to future scope (D26).                                                                                                                                                                                                                                                                                                                             |

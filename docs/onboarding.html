@@ -1,0 +1,2056 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>אונבורדינג — ColmanDevClub</title>
+    <style>
+      :root {
+        --page: #fafafb;
+        --surface: #ffffff;
+        --subtle: #f4f3f6;
+        --subtle-2: #f7f7f9;
+        --line: #e7e5ec;
+        --line-strong: #c9c5d3;
+        --ink: #1c1a22;
+        --muted: #5e5a6b;
+        --accent: #6b5ba8;
+        --accent-ink: #5a4b94;
+        --accent-tint: #f1eef8;
+        --band: #2e2350;
+        --warn-bg: #f8f0e2;
+        --warn: #80551a;
+        --risk-bg: #f7e8e6;
+        --risk: #94382c;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+        overflow-x: hidden;
+      }
+      body {
+        margin: 0;
+        background: var(--page);
+        color: var(--ink);
+        font-family:
+          'IBM Plex Sans Hebrew', 'Rubik', 'Assistant', 'Segoe UI', Arial,
+          sans-serif;
+        font-size: 16px;
+        line-height: 1.75;
+      }
+      /* כל מה שבאנגלית מבודד, כדי שלא ישבור את כיוון המשפט העברי */
+      bdi {
+        direction: ltr;
+        unicode-bidi: isolate;
+      }
+      code,
+      kbd {
+        unicode-bidi: isolate;
+      }
+      code,
+      kbd,
+      pre {
+        font-family: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+      }
+      code {
+        direction: ltr;
+        background: var(--subtle);
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 0 0.35em;
+        font-size: 0.88em;
+      }
+      pre {
+        direction: ltr;
+        text-align: left;
+        unicode-bidi: isolate;
+        background: #1e1a2b;
+        color: #edeaf5;
+        border-radius: 12px;
+        padding: 14px 16px;
+        overflow-x: auto;
+        font-size: 13.5px;
+        line-height: 1.6;
+        margin: 10px 0 16px;
+      }
+      pre code {
+        background: none;
+        border: 0;
+        padding: 0;
+        color: inherit;
+        font-size: inherit;
+      }
+      pre .c {
+        color: #9c95b5;
+      }
+      a {
+        color: var(--accent-ink);
+      }
+      a:focus-visible,
+      summary:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+        border-radius: 4px;
+      }
+
+      header.hero {
+        background: var(--band);
+        color: #fff;
+        padding: 48px 24px 40px;
+      }
+      header.hero .wrap {
+        max-width: 1180px;
+        margin: 0 auto;
+      }
+      header.hero h1 {
+        margin: 0 0 8px;
+        font-size: 34px;
+        line-height: 1.3;
+      }
+      header.hero p {
+        margin: 0;
+        color: #d8d2ec;
+        max-width: 760px;
+      }
+      header.hero .chips {
+        margin-top: 18px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      header.hero .chip {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 999px;
+        padding: 2px 12px;
+        font-size: 14px;
+      }
+
+      .layout {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 28px 24px 80px;
+        display: grid;
+        grid-template-columns: 250px minmax(0, 1fr);
+        gap: 32px;
+      }
+      main {
+        min-width: 0;
+      }
+      nav.toc {
+        position: sticky;
+        top: 16px;
+        align-self: start;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 16px 14px;
+        font-size: 14.5px;
+      }
+      nav.toc strong {
+        display: block;
+        margin-bottom: 6px;
+      }
+      nav.toc ol {
+        margin: 0;
+        padding-inline-start: 20px;
+      }
+      nav.toc li {
+        margin: 3px 0;
+      }
+      nav.toc a {
+        color: var(--ink);
+        text-decoration: none;
+      }
+      nav.toc a:hover {
+        color: var(--accent-ink);
+        text-decoration: underline;
+      }
+
+      main section {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 24px 28px;
+        margin-bottom: 22px;
+        scroll-margin-top: 16px;
+      }
+      h2 {
+        margin: 0 0 12px;
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      h2 .n {
+        display: inline-grid;
+        place-items: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        background: var(--accent-tint);
+        color: var(--accent-ink);
+        font-size: 16px;
+        flex: none;
+      }
+      h3 {
+        margin: 22px 0 6px;
+        font-size: 18px;
+      }
+      p {
+        margin: 6px 0 10px;
+      }
+      ul,
+      ol {
+        padding-inline-start: 22px;
+        margin: 6px 0 12px;
+      }
+      li {
+        margin: 3px 0;
+      }
+      .muted {
+        color: var(--muted);
+      }
+
+      .note,
+      .warn,
+      .risk {
+        border-radius: 12px;
+        padding: 12px 16px;
+        margin: 12px 0;
+        border-inline-start: 4px solid;
+      }
+      .note {
+        background: var(--accent-tint);
+        border-color: var(--accent);
+      }
+      .warn {
+        background: var(--warn-bg);
+        border-color: var(--warn);
+      }
+      .risk {
+        background: var(--risk-bg);
+        border-color: var(--risk);
+      }
+      .note b:first-child,
+      .warn b:first-child,
+      .risk b:first-child {
+        display: block;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 10px 0 16px;
+        font-size: 15px;
+      }
+      th,
+      td {
+        border: 1px solid var(--line);
+        padding: 8px 10px;
+        text-align: start;
+        vertical-align: top;
+      }
+      th {
+        background: var(--subtle);
+        font-weight: 600;
+      }
+      .table-wrap {
+        overflow-x: auto;
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 12px;
+        margin: 10px 0 16px;
+      }
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 12px 14px;
+        background: var(--subtle-2);
+      }
+      .card h4 {
+        margin: 0 0 4px;
+        font-size: 16px;
+      }
+      .card p {
+        margin: 0 0 6px;
+        font-size: 14.5px;
+      }
+      .card .links {
+        font-size: 14px;
+      }
+      .tag {
+        display: inline-block;
+        font-size: 12px;
+        border-radius: 999px;
+        padding: 0 8px;
+        background: var(--accent-tint);
+        color: var(--accent-ink);
+        margin-inline-start: 6px;
+        vertical-align: middle;
+      }
+
+      .flow {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        margin: 12px 0;
+      }
+      .flow span.step {
+        background: var(--accent-tint);
+        color: var(--accent-ink);
+        border-radius: 10px;
+        padding: 6px 12px;
+        font-weight: 600;
+      }
+      .flow span.arrow {
+        color: var(--muted);
+      }
+
+      .checklist li {
+        list-style: none;
+        position: relative;
+      }
+      .checklist {
+        padding-inline-start: 4px;
+      }
+      .checklist input {
+        margin-inline-end: 8px;
+        accent-color: var(--accent);
+      }
+
+      details {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 8px 14px;
+        margin: 8px 0;
+        background: var(--subtle-2);
+      }
+      summary {
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .arch {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 10px;
+        margin: 14px 0;
+        font-size: 14px;
+      }
+      .arch div {
+        border: 1px solid var(--line-strong);
+        border-radius: 12px;
+        padding: 10px;
+        text-align: center;
+        background: var(--surface);
+      }
+      .arch div b {
+        display: block;
+      }
+
+      footer {
+        text-align: center;
+        color: var(--muted);
+        font-size: 14px;
+        padding: 0 24px 40px;
+      }
+
+      @media (max-width: 900px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+        nav.toc {
+          position: static;
+        }
+        main section {
+          padding: 20px 18px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero">
+      <div class="wrap">
+        <h1>ברוכים הבאים לצוות האתר של <bdi>ColmanDevClub</bdi> 👋</h1>
+        <p>
+          המדריך הזה לוקח אתכם מאפס ועד <bdi>PR</bdi> ראשון: אילו חשבונות צריך,
+          איך מריצים את שני הריפוזיטוריז על המחשב, איפה כל דבר נמצא בקוד, מה
+          הכללים, ואיך עובדים עם <bdi>Jira</bdi> ו־<bdi>GitHub</bdi>. כל
+          טכנולוגיה מוסברת בקצרה עם קישור ללמידה, אז גם אם אתם רואים משהו בפעם
+          הראשונה, זה בסדר.
+        </p>
+        <div class="chips">
+          <span class="chip">⏱ בערך שעה–שעתיים בפעם הראשונה</span>
+          <span class="chip"
+            >🗂 שני ריפוזיטוריז: <bdi>Web</bdi> + <bdi>API</bdi></span
+          >
+          <span class="chip">📌 <bdi>S-0.8 / KAN</bdi></span>
+        </div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <nav class="toc" aria-label="תוכן עניינים">
+        <strong>תוכן עניינים</strong>
+        <ol>
+          <li><a href="#big-picture">התמונה הגדולה</a></li>
+          <li><a href="#prereqs">מה להתקין</a></li>
+          <li><a href="#access">גישה לכלים וסודות</a></li>
+          <li><a href="#setup">הרצה מקומית</a></li>
+          <li><a href="#structure">מבנה התיקיות</a></li>
+          <li><a href="#conventions">כללי כתיבת קוד</a></li>
+          <li><a href="#workflow">תהליך העבודה</a></li>
+          <li><a href="#tests">טסטים</a></li>
+          <li><a href="#stack">מילון הטכנולוגיות</a></li>
+          <li><a href="#links">קישורים ומסמכים</a></li>
+          <li><a href="#troubleshooting">תקלות נפוצות</a></li>
+          <li><a href="#done">צ׳קליסט סיום</a></li>
+        </ol>
+      </nav>
+
+      <main>
+        <!-- 1 -->
+        <section id="big-picture">
+          <h2><span class="n">1</span>התמונה הגדולה</h2>
+          <p>
+            אנחנו בונים מחדש את האתר של המועדון: אתר ציבורי (דף בית, מנטורים,
+            הרשמה ליום מיון), אזור לחברי מועדון (חומרי לימוד), ודשבורד למנטורים
+            ומנהלים (תוכנית לימודים, חומרים, נוכחות, מועמדים).
+          </p>
+          <p>הקוד מחולק לשני ריפוזיטוריז נפרדים:</p>
+          <div class="table-wrap">
+            <table>
+              <tr>
+                <th>ריפו</th>
+                <th>מה יש בו</th>
+                <th>טכנולוגיות עיקריות</th>
+              </tr>
+              <tr>
+                <td>
+                  <a
+                    href="https://github.com/colmandevclub/ColmanDevClub-New-Website"
+                    ><bdi>ColmanDevClub-New-Website</bdi></a
+                  >
+                </td>
+                <td>צד הלקוח (<bdi>Frontend</bdi>): כל המסכים שרואים בדפדפן</td>
+                <td>
+                  <bdi>React 19, Vite, TypeScript, Tailwind, shadcn/ui</bdi>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a
+                    href="https://github.com/colmandevclub/ColmanDevClub-Server"
+                    ><bdi>ColmanDevClub-Server</bdi></a
+                  >
+                </td>
+                <td>
+                  צד השרת (<bdi>API</bdi>): כל הלוגיקה, ההרשאות והגישה למסד
+                  הנתונים
+                </td>
+                <td><bdi>Express 5, TypeScript, MongoDB, zod</bdi></td>
+              </tr>
+            </table>
+          </div>
+          <p>ככה החלקים מדברים אחד עם השני:</p>
+          <div class="arch" aria-label="תרשים ארכיטקטורה">
+            <div>
+              <b><bdi>Browser</bdi></b
+              ><bdi>React SPA</bdi>
+            </div>
+            <div>
+              <b><bdi>Vercel</bdi></b
+              ><bdi>/api/* → API (same origin)</bdi>
+            </div>
+            <div>
+              <b><bdi>Express API</bdi></b
+              ><bdi>serverless function</bdi>
+            </div>
+            <div>
+              <b><bdi>MongoDB Atlas</bdi></b
+              ><bdi>database</bdi>
+            </div>
+            <div>
+              <b><bdi>Cloudinary</bdi></b
+              ><bdi>files</bdi>
+            </div>
+            <div>
+              <b><bdi>Gmail SMTP</bdi></b
+              ><bdi>emails</bdi>
+            </div>
+          </div>
+          <ul>
+            <li>
+              הדפדפן מדבר רק עם דומיין אחד. כל בקשה ל־<code>/api/*</code> מועברת
+              (<bdi>rewrite</bdi>) לפרויקט ה־<bdi>API</bdi> ב־<bdi>Vercel</bdi>,
+              כך שאין בעיות <bdi>CORS</bdi> והעוגיות עובדות פשוט.
+            </li>
+            <li>
+              השרת הוא היחיד שבודק הרשאות. בדיקות בצד הלקוח הן רק לנוחות המשתמש.
+            </li>
+            <li>
+              קבצים (מצגות, תמונות פרופיל) לא עוברים דרך השרת: השרת נותן קישור
+              חתום וקצר־מועד, והדפדפן מעלה או מוריד ישירות
+              מ־<bdi>Cloudinary</bdi>.
+            </li>
+          </ul>
+          <div class="note">
+            <b
+              >שיטת העבודה: <bdi>SDD</bdi> (<bdi>Spec-Driven Development</bdi
+              >)</b
+            >
+            קודם דרישות (<bdi>REQUIREMENTS</bdi>), אחר כך תכנון טכני
+            (<bdi>DESIGN</bdi>), ואז משימות (<bdi>TASKS</bdi>). כל דרישה מקבלת
+            מזהה כמו <code>R-22</code>, כל החלטה טכנית מזהה כמו
+            <code>T-10</code>, וכל משימה מזהה כמו <code>S-1.3</code> שמופיעה
+            ב־<bdi>Jira</bdi> כ־<code>KAN-&lt;n&gt;</code>. לפני שכותבים קוד
+            למשימה, קוראים את הדרישות והסעיף הרלוונטי ב־<bdi>DESIGN</bdi>.
+          </div>
+        </section>
+
+        <!-- 2 -->
+        <section id="prereqs">
+          <h2><span class="n">2</span>מה להתקין על המחשב</h2>
+          <div class="table-wrap">
+            <table>
+              <tr>
+                <th>כלי</th>
+                <th>גרסה</th>
+                <th>בשביל מה</th>
+                <th>התקנה</th>
+              </tr>
+              <tr>
+                <td><bdi>Git</bdi></td>
+                <td>כל גרסה עדכנית</td>
+                <td>ניהול גרסאות של הקוד</td>
+                <td><a href="https://git-scm.com/downloads">git-scm.com</a></td>
+              </tr>
+              <tr>
+                <td><bdi>nvm</bdi></td>
+                <td>עדכנית</td>
+                <td>מתקין ומחליף גרסאות <bdi>Node</bdi> בקלות</td>
+                <td>
+                  <a
+                    href="https://github.com/nvm-sh/nvm#installing-and-updating"
+                    >nvm</a
+                  >
+                  (<bdi>Windows</bdi>:
+                  <a href="https://github.com/coreybutler/nvm-windows"
+                    >nvm-windows</a
+                  >)
+                </td>
+              </tr>
+              <tr>
+                <td><bdi>Node.js</bdi></td>
+                <td><bdi>22 LTS</bdi> (לפחות <bdi>22.22.2</bdi>)</td>
+                <td>מריץ <bdi>JavaScript</bdi> מחוץ לדפדפן</td>
+                <td>דרך <bdi>nvm</bdi> (בהמשך)</td>
+              </tr>
+              <tr>
+                <td><bdi>pnpm</bdi></td>
+                <td><bdi>10.32.1</bdi> בדיוק</td>
+                <td>מנהל החבילות שלנו (במקום <bdi>npm</bdi>)</td>
+                <td><code>npm install -g pnpm@10.32.1</code></td>
+              </tr>
+              <tr>
+                <td><bdi>VS Code</bdi></td>
+                <td>—</td>
+                <td>עורך קוד מומלץ</td>
+                <td>
+                  <a href="https://code.visualstudio.com/"
+                    >code.visualstudio.com</a
+                  >
+                </td>
+              </tr>
+            </table>
+          </div>
+          <p>
+            תוספים מומלצים ל־<bdi>VS Code</bdi>: <bdi>ESLint</bdi>,
+            <bdi>Prettier</bdi>, <bdi>Tailwind CSS IntelliSense</bdi>. כדאי
+            להפעיל <bdi>Format on Save</bdi>.
+          </p>
+          <p>בדיקה שהכול מותקן:</p>
+          <pre><code>git --version
+node --version     <span class="c"># v22.x</span>
+pnpm --version     <span class="c"># 10.32.1</span></code></pre>
+        </section>
+
+        <!-- 3 -->
+        <section id="access">
+          <h2><span class="n">3</span>גישה לכלים, ומאיפה מגיעים הסודות</h2>
+          <p>
+            בקשו מאחד הלידים (<bdi>@Lavi2910</bdi> או <bdi>@Elad-Abutbul</bdi>)
+            גישה לפי הטבלה. לא כולם צריכים הכול: רוב המפתחים צריכים רק את שלוש
+            השורות הראשונות.
+          </p>
+          <div class="table-wrap">
+            <table>
+              <tr>
+                <th>כלי</th>
+                <th>מה זה</th>
+                <th>מי צריך</th>
+                <th>מה לבקש</th>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://github.com/colmandevclub"
+                    ><bdi>GitHub</bdi></a
+                  >
+                </td>
+                <td>איפה שהקוד יושב, ואיפה שעושים <bdi>Pull Requests</bdi></td>
+                <td>כולם</td>
+                <td>
+                  הרשאת <bdi>Write</bdi> לשני הריפוזיטוריז (שלחו את שם המשתמש
+                  שלכם)
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://almoglavi29.atlassian.net/browse/KAN"
+                    ><bdi>Jira</bdi></a
+                  >
+                </td>
+                <td>לוח המשימות של הספרינט (פרויקט <bdi>KAN</bdi>)</td>
+                <td>כולם</td>
+                <td>הזמנה לפרויקט במייל</td>
+              </tr>
+              <tr>
+                <td>
+                  פרויקט <bdi>Claude</bdi> ״<bdi>ColmanDevClub Website</bdi>״
+                </td>
+                <td>
+                  העיצוב ב־<bdi>Claude Design</bdi> (מקור האמת לממשק). מסמכי
+                  הדרישות, התכנון והמשימות נמצאים בריפו של האתר, ב־<code
+                    >docs/specs/</code
+                  >
+                </td>
+                <td>כולם</td>
+                <td>שיתוף לפרויקט ולארטיפקט העיצוב</td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://vercel.com/"><bdi>Vercel</bdi></a>
+                </td>
+                <td>האחסון של האתר וה־<bdi>API</bdi></td>
+                <td>לידים, ומי שעובד על דיפלוי</td>
+                <td>
+                  הזמנה לצוות ב־<bdi>Vercel</bdi> (בדרך כלל לא צריך: כל
+                  <bdi>PR</bdi> מקבל לינק <bdi>Preview</bdi> אוטומטית)
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://cloud.mongodb.com/"
+                    ><bdi>MongoDB Atlas</bdi></a
+                  >
+                </td>
+                <td>מסד הנתונים בענן</td>
+                <td>רק מי שעובד על מודלים ונתונים</td>
+                <td>גישה לפרויקט ב־<bdi>Atlas</bdi></td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://console.cloudinary.com/"
+                    ><bdi>Cloudinary</bdi></a
+                  >
+                </td>
+                <td>אחסון קבצים ותמונות</td>
+                <td>רק מי שעובד על העלאת קבצים</td>
+                <td>גישה לקונסולה</td>
+              </tr>
+            </table>
+          </div>
+          <p>
+            כל השירותים (<bdi>Vercel</bdi>, <bdi>MongoDB Atlas</bdi>,
+            <bdi>Cloudinary</bdi>, <bdi>Cloudflare</bdi>, התחברות עם
+            <bdi>Google</bdi> והמייל של המועדון) שייכים לחשבון ה־<bdi
+              >Gmail</bdi
+            >
+            של המועדון, לא לחשבון פרטי של סטודנט (<bdi>DESIGN O-5</bdi>). את
+            הגישה נותנים הלידים מתוך החשבון הזה.
+          </p>
+
+          <h3>סודות (<bdi>secrets</bdi>)</h3>
+          <p>
+            סיסמאות ומפתחות לא נמצאים בגיט אף פעם. בריפו של השרת יש קובץ
+            <code>.env.example</code> עם רשימת כל המשתנים בלי הערכים הרגישים. את
+            הערכים האמיתיים מקבלים מליד בהודעה פרטית, ושמים בקובץ
+            <code>.env</code> אצלכם (הוא כבר ב־<code>.gitignore</code>). ב־<bdi
+              >Preview</bdi
+            >
+            ובפרודקשן אותם משתנים מוגדרים כ־<bdi>Environment Variables</bdi>
+            בפרויקט ה־<bdi>API</bdi> ב־<bdi>Vercel</bdi>, ורק הלידים מנהלים
+            אותם.
+          </p>
+          <div class="table-wrap">
+            <table>
+              <tr>
+                <th>משתנה</th>
+                <th>למה הוא משמש</th>
+                <th>מאיפה מקבלים</th>
+              </tr>
+              <tr>
+                <td><code>NODE_ENV</code>, <code>PORT</code></td>
+                <td>מצב הריצה והפורט (ברירת מחדל <code>3000</code>)</td>
+                <td>כבר ב־<code>.env.example</code></td>
+              </tr>
+              <tr>
+                <td><code>APP_ORIGIN</code></td>
+                <td>
+                  הכתובת שהדפדפן פותח (<bdi>HTTPS</bdi>). השרת מפנה אליה כל בקשת
+                  <bdi>HTTP</bdi> ובודק מולה את ה־<code>Origin</code> בבקשות
+                  שמשנות נתונים
+                </td>
+                <td>כבר ב־<code>.env.example</code> (לא רגיש)</td>
+              </tr>
+              <tr>
+                <td><code>MONGODB_URI</code></td>
+                <td>כתובת החיבור למסד הנתונים</td>
+                <td>ליד (רגיש)</td>
+              </tr>
+              <tr>
+                <td>
+                  <code>CLOUDINARY_CLOUD_NAME</code>,
+                  <code>CLOUDINARY_API_KEY</code>,
+                  <code>CLOUDINARY_API_SECRET</code>
+                </td>
+                <td>העלאה והורדה של קבצים</td>
+                <td>שם הענן כבר בקובץ; המפתח והסוד מליד (הסוד רגיש)</td>
+              </tr>
+              <tr>
+                <td>
+                  <code>GMAIL_USER</code>, <code>GMAIL_APP_PASSWORD</code>
+                </td>
+                <td>שליחת מיילים מחשבון המועדון</td>
+                <td>המשתמש כבר בקובץ; סיסמת האפליקציה מליד (רגיש)</td>
+              </tr>
+            </table>
+          </div>
+          <div class="risk">
+            <b>שימו לב: מסד נתונים משותף</b> כרגע סביבת הפיתוח המקומית והפרודקשן
+            משתמשות באותו מסד נתונים. לא מריצים סקריפטים שמוחקים או משנים נתונים
+            בכמויות, ונתוני בדיקה מסמנים במיילים שנגמרים
+            ב־<code>@test.local</code>. אם משהו נראה לא בטוח, שואלים ליד לפני.
+          </div>
+          <div class="warn">
+            <b>לעולם לא:</b> לא מעלים <code>.env</code> לגיט, לא מדביקים סודות
+            בצ׳אט קבוצתי או ב־<bdi>PR</bdi>, ולא שמים סוד במשתנה שמתחיל ב־<code
+              >VITE_</code
+            >
+            (כל מה שמתחיל ב־<code>VITE_</code> נכנס לקוד שהדפדפן מוריד, וכל אחד
+            יכול לראות אותו).
+          </div>
+        </section>
+
+        <!-- 4 -->
+        <section id="setup">
+          <h2><span class="n">4</span>הרצה מקומית של שני הריפוזיטוריז</h2>
+          <h3>שלב 1: <bdi>clone</bdi> לשניהם, אחד ליד השני</h3>
+          <pre><code>mkdir ColmanDevClub && cd ColmanDevClub
+git clone https://github.com/colmandevclub/ColmanDevClub-Server.git
+git clone https://github.com/colmandevclub/ColmanDevClub-New-Website.git</code></pre>
+
+          <h3>שלב 2: השרת (<bdi>API</bdi>)</h3>
+          <pre><code>cd ColmanDevClub-Server
+nvm install 22 && nvm use 22
+pnpm install
+cp .env.example .env      <span class="c"># Windows: copy .env.example .env</span>
+<span class="c"># fill in the secret values you got from a lead</span>
+pnpm dev                  <span class="c"># http://localhost:3000</span></code></pre>
+          <p>
+            <code>pnpm dev</code> מריץ את השרת עם <bdi>tsx watch</bdi>, כלומר כל
+            שמירה של קובץ מפעילה אותו מחדש. בהפעלה, הקובץ
+            <code>src/config/env.ts</code> בודק עם <bdi>zod</bdi> שכל משתני
+            הסביבה תקינים. אם משהו חסר או שגוי, השרת לא יעלה ויכתוב בדיוק מה
+            הבעיה.
+          </p>
+          <div class="warn">
+            <b>תקלה ידועה ב־<code>main</code>:</b> <code>pnpm dev</code> נופל עם
+            <code dir="ltr">ReferenceError: require is not defined</code>, בגלל
+            השורה
+            <code dir="ltr">import helmet = require('helmet')</code> ב־<code
+              >src/app.ts</code
+            >
+            (<bdi>tsx</bdi> לא תומך בה). עד התיקון ב־<a
+              href="https://almoglavi29.atlassian.net/browse/KAN-113"
+              ><bdi>KAN-113</bdi></a
+            >, מריצים גרסה בנויה (בלי <bdi>watch</bdi>):
+            <pre><code>pnpm build && node --env-file=.env dist/server.js</code></pre>
+          </div>
+          <p>
+            בדיקה בטרמינל אחר. השרת מחייב <bdi>HTTPS</bdi> בכל סביבה, אז בקשת
+            <bdi>HTTP</bdi> ישירה מקבלת הפניה (<code>308</code>)
+            ל־<code>APP_ORIGIN</code>. זה סימן שהשרת עלה:
+          </p>
+          <pre><code>curl -i http://localhost:3000/api/v1/health
+<span class="c"># HTTP/1.1 308 Permanent Redirect</span>
+<span class="c"># Location: https://localhost:.../api/v1/health</span>
+
+<span class="c"># the same request as if it came through an HTTPS proxy:</span>
+curl -H "X-Forwarded-Proto: https" http://localhost:3000/api/v1/health
+<span class="c"># {"status":"ok","message":"ColmanDevClub API is healthy"}</span></code></pre>
+
+          <h3>שלב 3: האתר (<bdi>Web</bdi>), בטרמינל נפרד</h3>
+          <pre><code>cd ColmanDevClub-New-Website
+nvm use                   <span class="c"># reads .nvmrc → Node 22</span>
+pnpm install
+pnpm dev                  <span class="c"># http://localhost:5173</span></code></pre>
+          <p>
+            בצד הלקוח אין כרגע משתני סביבה, אז אין צורך ב־<code>.env</code>.
+            פתחו את
+            <a href="http://localhost:5173" dir="ltr">http://localhost:5173</a>.
+          </p>
+
+          <h3>שלב 4: לוודא ששניהם מדברים</h3>
+          <p>
+            שרת הפיתוח של <bdi>Vite</bdi> מעביר (<bdi>proxy</bdi>) כל בקשה
+            ל־<code>/api</code> אל <code>http://localhost:3000</code>. כלומר
+            הקוד בדפדפן תמיד קורא ל־<code>/api/v1/...</code>, בדיוק כמו
+            בפרודקשן:
+          </p>
+          <pre><code>curl http://localhost:5173/api/v1/health</code></pre>
+          <p>
+            אם קיבלתם את אותה תשובה, הכול עובד. אם השרת רץ על פורט אחר, עדכנו את
+            <code>DEVELOPMENT.API_TARGET</code> בקובץ
+            <code>src/constants/development.ts</code>.
+          </p>
+          <h3>זרימת <bdi>HTTPS</bdi> מקומית</h3>
+          <p>
+            הקוקיז של ההתחברות הם <code>Secure</code>, והשרת בודק
+            <code>Origin</code> ו־<code>X-CDC-Request: 1</code> בכל בקשה שמשנה
+            נתונים, אז גם מקומית הדפדפן צריך לעבוד מול מקור <bdi>HTTPS</bdi>
+            אחד:
+          </p>
+          <ol>
+            <li>
+              הדפדפן פותח את <bdi>Vite</bdi> ב־<code dir="ltr"
+                >https://localhost:5173</code
+              >
+              (תעודה מקומית).
+            </li>
+            <li>
+              <bdi>Vite</bdi> מעביר את <code>/api</code> לשרת ב־<code dir="ltr"
+                >http://localhost:3000</code
+              >
+              ומוסיף <code>X-Forwarded-Proto: https</code>.
+            </li>
+            <li>
+              ב־<code>.env</code> של השרת:
+              <code dir="ltr">APP_ORIGIN=https://localhost:5173</code>, כלומר
+              הכתובת שהדפדפן פותח ולא הפורט של השרת.
+            </li>
+          </ol>
+          <div class="warn">
+            <b>עדיין לא עובד ב־<code>main</code>:</b> כרגע <bdi>Vite</bdi> רץ על
+            <bdi>HTTP</bdi> בלי <code>X-Forwarded-Proto</code>, ולכן
+            <code>curl http://localhost:5173/api/v1/health</code> מקבל
+            <code>308</code> במקום תשובה. התיקון, כולל פקודת בדיקה קבועה, נמצא
+            ב־<a href="https://almoglavi29.atlassian.net/browse/KAN-113"
+              ><bdi>KAN-113 (S-0.21)</bdi></a
+            >. עד שהוא ממוזג, עבדו מול השרת ישירות עם ה־<code>curl</code> משלב
+            2.
+          </div>
+          <div class="note">
+            <b>מה קורה ב־<code>pnpm install</code>?</b> חוץ מהתקנת החבילות, הוא
+            מפעיל את <bdi>Husky</bdi>, שמתקין <bdi>git hook</bdi>: לפני כל
+            <bdi>commit</bdi> רץ <bdi>lint-staged</bdi>, שמפרמט ובודק רק את
+            הקבצים ששיניתם. אם ה־<bdi>commit</bdi> נכשל, תקנו את מה שהוא כותב
+            ונסו שוב.
+          </div>
+        </section>
+
+        <!-- 5 -->
+        <section id="structure">
+          <h2><span class="n">5</span>מבנה התיקיות, ואיפה שמים קוד חדש</h2>
+          <h3><bdi>ColmanDevClub-New-Website</bdi> (אתר)</h3>
+          <pre><code>src/
+  app/            router, providers (QueryClient, RTL direction)
+  pages/
+    public/       Home, Mentors, Join, SignIn ...
+    member/       member area
+    dashboard/    mentor / admin screens
+    errors/       NotFound, NoAccess
+  components/
+    ui/           shadcn/ui components (generated, then restyled)
+    layout/       SiteHeader, SiteFooter, DashSidebar ...
+    shared/       EmptyState, Skeletons, StatusPill, ConfirmDialog ...
+  features/       per-domain hooks + API calls (auth, years, materials ...)
+  schemas/        zod schemas (copy of the server's)
+  content/        static public content
+  constants/      routes, API config, locale, site meta, page copy, theme
+  lib/            axios client (api.ts), cn(), helpers
+  test/           shared test setup
+tools/eslint/     custom RTL lint rule
+docs/             this onboarding page
+vercel.json       /api/* rewrite + SPA fallback</code></pre>
+          <ul>
+            <li>
+              <b>מסך חדש</b> → קובץ ב־<code>src/pages/&lt;area&gt;/</code>,
+              ונתיב חדש ב־<code>src/constants/routes.ts</code>
+              וב־<code>src/app/router.tsx</code>.
+            </li>
+            <li>
+              <b>קריאה ל־<bdi>API</bdi></b> → <bdi>hook</bdi> ב־<code
+                >src/features/&lt;domain&gt;/</code
+              >
+              שמשתמש ב־<bdi>TanStack Query</bdi> ובלקוח
+              <code>api</code> מ־<code>@/lib/api</code>. לא קוראים ל־<code
+                >fetch</code
+              >
+              ישירות מתוך קומפוננטה.
+            </li>
+            <li>
+              <b>קומפוננטה כללית</b> → <code>src/components/shared/</code>. רכיב
+              בסיס מ־<bdi>shadcn</bdi> →
+              <code>pnpm exec shadcn add &lt;name&gt;</code>, והוא ייכנס
+              ל־<code>components/ui/</code>.
+            </li>
+            <li>
+              <b>טקסטים קבועים, נתיבים, הגדרות</b> →
+              <code>src/constants/</code>, קובץ לפי נושא.
+            </li>
+            <li>
+              מייבאים דרך הקיצור <code>@/</code>, שמצביע על <code>src/</code>.
+              לדוגמה: <code>import { api } from '@/lib/api'</code>.
+            </li>
+            <li>
+              טסטים יושבים ליד הקוד שהם בודקים: <code>button.tsx</code> ←
+              <code>button.test.tsx</code>.
+            </li>
+          </ul>
+
+          <h3><bdi>ColmanDevClub-Server</bdi> (שרת)</h3>
+          <pre><code>src/
+  app.ts          express app + middleware chain
+  server.ts       local entry: app.listen()
+  config/         env parsing with zod
+  modules/
+    &lt;domain&gt;/     auth, users, years, weeks, materials, tracking, admissions ...
+      &lt;domain&gt;.routes.ts      URL → middleware → controller
+      &lt;domain&gt;.controller.ts  HTTP only: read req, call service, send res
+      &lt;domain&gt;.service.ts     business rules
+      &lt;domain&gt;.test.ts
+  middleware/     authenticate, authorize, validate, rateLimit, csrf, errorHandler
+  services/       storage (Cloudinary), email (Gmail), google
+  models/         Mongoose models
+  policies/       permission functions (who may do what)
+  schemas/        zod schemas — the source of truth
+  tests/          API tests</code></pre>
+          <ul>
+            <li>
+              <b>אנדפוינט חדש</b> → במודול המתאים
+              ב־<code>src/modules/&lt;domain&gt;/</code>: נתיב
+              ב־<code>routes</code>, טיפול ב־<bdi>HTTP</bdi>
+              ב־<code>controller</code>, והלוגיקה עצמה ב־<code>service</code>.
+            </li>
+            <li>
+              <b>סכמת קלט/פלט</b> → <code>src/schemas/</code>. אם גם האתר צריך
+              אותה, מעתיקים אותה ל־<code>src/schemas/</code> באתר (העותק של השרת
+              הוא הקובע).
+            </li>
+            <li>
+              <b>הרשאה חדשה</b> → פונקציה ב־<code>src/policies/</code> עם טסט.
+            </li>
+            <li>
+              <b>מודל במסד הנתונים</b> → <code>src/models/</code>, לפי טבלת
+              הקולקציות ב־<bdi>DESIGN §8</bdi>.
+            </li>
+          </ul>
+          <p class="muted">
+            חלק מהתיקיות עדיין ריקות: הן יתמלאו עם המשימות הבאות. המבנה המלא
+            מתואר ב־<bdi>DESIGN §3</bdi>.
+          </p>
+        </section>
+
+        <!-- 6 -->
+        <section id="conventions">
+          <h2><span class="n">6</span>כללי כתיבת קוד</h2>
+          <div class="note">
+            <b>מקור האמת לממשק: <bdi>Claude Design</bdi></b
+            >איך כל מסך נראה (פריסה, צבעים, טיפוגרפיה, ריווחים, מצבי טעינה וריק)
+            נקבע ב־<a href="https://claude.ai/artifact/TZheWo4chpeyaskP9gLxi3"
+              >קובץ העיצוב ב־<bdi>Claude Design</bdi></a
+            >
+            שמשותף עם הצוות. לפני שבונים מסך פותחים אותו שם ובונים לפיו. אם משהו
+            חסר או לא ברור בעיצוב, לא ממציאים: שואלים ליד, והעיצוב מתעדכן קודם
+            ורק אז הקוד.
+          </div>
+
+          <h3>1. <bdi>RTL</bdi>: רק מחלקות לוגיות</h3>
+          <p>
+            האתר כולו בעברית, <code>&lt;html lang="he" dir="rtl"&gt;</code>.
+            ב־<bdi>Tailwind</bdi> לא כותבים "שמאל" ו"ימין" אלא "התחלה" ו"סוף",
+            כך שהעיצוב מתהפך נכון לבד.
+          </p>
+          <div class="table-wrap">
+            <table>
+              <tr>
+                <th>❌ אסור</th>
+                <th>✅ במקום</th>
+                <th>משמעות</th>
+              </tr>
+              <tr>
+                <td><code>ml-4</code> / <code>mr-4</code></td>
+                <td><code>ms-4</code> / <code>me-4</code></td>
+                <td><bdi>margin</bdi> בהתחלה / בסוף</td>
+              </tr>
+              <tr>
+                <td><code>pl-4</code> / <code>pr-4</code></td>
+                <td><code>ps-4</code> / <code>pe-4</code></td>
+                <td><bdi>padding</bdi> בהתחלה / בסוף</td>
+              </tr>
+              <tr>
+                <td><code>left-0</code> / <code>right-0</code></td>
+                <td><code>start-0</code> / <code>end-0</code></td>
+                <td>מיקום</td>
+              </tr>
+              <tr>
+                <td><code>text-left</code> / <code>text-right</code></td>
+                <td><code>text-start</code> / <code>text-end</code></td>
+                <td>יישור טקסט</td>
+              </tr>
+              <tr>
+                <td><code>rounded-l</code>, <code>border-r</code></td>
+                <td><code>rounded-s</code>, <code>border-e</code></td>
+                <td>פינות וגבולות</td>
+              </tr>
+            </table>
+          </div>
+          <p>
+            יש כלל <bdi>ESLint</bdi> משלנו
+            (<code>tools/eslint/no-physical-direction.js</code>) שחוסם את
+            המחלקות האסורות, וה־<bdi>CI</bdi> ייכשל אם הן מופיעות. כותבים שמות
+            מחלקות מלאים בקוד ולא מרכיבים אותם מחלקים (<code>'m' + side</code>),
+            כי אז הכלל לא יכול לבדוק אותם.
+          </p>
+          <p>
+            <b>טקסט מעורב עברית־אנגלית:</b> מונח באנגלית בתוך משפט עברי עוטפים
+            ב־<code>&lt;bdi&gt;</code>. מיילים, כתובות, טלפונים וקוד מקבלים
+            <code>dir="ltr"</code>.
+          </p>
+          <pre><code>&lt;p&gt;השיעור הבא: &lt;bdi&gt;React Hooks&lt;/bdi&gt;&lt;/p&gt;
+&lt;a href="mailto:colmandevclub@gmail.com" dir="ltr"&gt;colmandevclub@gmail.com&lt;/a&gt;
+&lt;div className="ms-4 ps-2 text-start"&gt;...&lt;/div&gt;</code></pre>
+
+          <h3>2. <bdi>zod</bdi>: כל קלט עובר סכמה</h3>
+          <p>
+            כל <bdi>body</bdi>, <bdi>query</bdi> ו־<bdi>params</bdi> שמגיע לשרת
+            נבדק מול סכמת <bdi>zod</bdi> דרך ה־<bdi>middleware</bdi>
+            <code>validate(schema)</code>, לפני שהוא מגיע
+            ל־<bdi>controller</bdi>. הסכמה בשרת היא מקור האמת. באתר יש עותק שלה,
+            שמשמש לבדיקת טפסים עם <bdi>react-hook-form</bdi>.
+          </p>
+          <pre><code>// server: src/schemas/application.schema.ts
+export const createApplicationSchema = z.object({
+  fullName: z.string().min(2),
+  email: z.email(),
+  phone: z.string().regex(/^05\d{8}$/),
+})
+export type CreateApplicationInput = z.infer&lt;typeof createApplicationSchema&gt;
+
+// route
+router.post('/', validate(createApplicationSchema), controller.create)</code></pre>
+
+          <h3>3. <bdi>Policies</bdi>: כל נתיב מצהיר מי מורשה</h3>
+          <p>
+            הרשאות נכתבות כפונקציות פשוטות ב־<code>src/policies/</code>,
+            ומחוברות לנתיב עם <code>authorize(policy)</code>. לא כותבים
+            <code>if (user.role === 'admin')</code> בתוך
+            <bdi>controller</bdi> או <bdi>service</bdi>. כל
+            <bdi>policy</bdi> נבדקת בטסט מול טבלת ההרשאות ב־<bdi
+              >REQUIREMENTS §3</bdi
+            >.
+          </p>
+          <pre><code>// src/policies/materials.policy.ts
+export const canManageMaterials = (u: User, yearId: string) =&gt;
+  isAdmin(u) || isMentorOfYear(u, yearId)
+
+// route
+router.post('/weeks/:id/materials', authenticate, authorize(canManageMaterials), validate(schema), controller.create)</code></pre>
+
+          <h3>4. פורמט שגיאות אחיד</h3>
+          <p>
+            כל שגיאה מהשרת חוזרת באותו מבנה, כך שהאתר יודע להציג אותה בלי לנחש:
+          </p>
+          <pre><code>{ "error": { "code": "VALIDATION_ERROR", "message": "...", "fields": { "phone": "..." } } }</code></pre>
+          <div class="table-wrap">
+            <table>
+              <tr>
+                <th><bdi>code</bdi></th>
+                <th><bdi>HTTP</bdi></th>
+                <th>מתי</th>
+              </tr>
+              <tr>
+                <td><code>VALIDATION_ERROR</code></td>
+                <td><bdi>400</bdi></td>
+                <td>
+                  הקלט לא עבר את סכמת ה־<bdi>zod</bdi> (הפירוט
+                  ב־<code>fields</code>)
+                </td>
+              </tr>
+              <tr>
+                <td><code>UNAUTHENTICATED</code></td>
+                <td><bdi>401</bdi></td>
+                <td>לא מחוברים, או שהטוקן פג</td>
+              </tr>
+              <tr>
+                <td><code>FORBIDDEN</code></td>
+                <td><bdi>403</bdi></td>
+                <td>מחוברים, אבל אין הרשאה</td>
+              </tr>
+              <tr>
+                <td><code>NOT_FOUND</code></td>
+                <td><bdi>404</bdi></td>
+                <td>לא קיים (או קיים ושייך למישהו אחר: לא מגלים את זה)</td>
+              </tr>
+              <tr>
+                <td><code>CONFLICT</code></td>
+                <td><bdi>409</bdi></td>
+                <td>כפילות, למשל מייל שכבר רשום</td>
+              </tr>
+              <tr>
+                <td><code>RATE_LIMITED</code></td>
+                <td><bdi>429</bdi></td>
+                <td>יותר מדי ניסיונות</td>
+              </tr>
+            </table>
+          </div>
+          <p>
+            בקוד זורקים שגיאה, וה־<code>errorHandler</code> המרכזי הופך אותה
+            לתשובה במבנה הזה. לא שולחים
+            <code>res.status(500).send('oops')</code> ידנית.
+          </p>
+
+          <h3>5. עוד כמה כללים</h3>
+          <ul>
+            <li>
+              קריאות לשרת רק דרך <code>api</code> מ־<code>@/lib/api</code>: הוא
+              כבר מוגדר עם <code>/api/v1</code>, עוגיות, והכותרת
+              <code>X-CDC-Request: 1</code> שהשרת דורש בבקשות ששומרות או משנות
+              נתונים.
+            </li>
+            <li>
+              אין לוגים עם מידע אישי: לא מיילים, לא טלפונים, לא טוקנים ולא הערות
+              מנטורים.
+            </li>
+            <li>טקסטים בממשק כתובים בעברית ישר בקוד (אין ספריית תרגום).</li>
+            <li>
+              כל רשימה צריכה מצב טעינה (<bdi>skeleton</bdi>) ומצב ריק
+              (<bdi>EmptyState</bdi>). מחיקה דורשת אישור.
+            </li>
+            <li>
+              צבעים, רדיוסים ופונטים לוקחים מהטוקנים
+              ב־<code>src/constants/theme.css</code>, לא ערכי
+              <bdi>hex</bdi> אקראיים. הטוקנים עצמם מועתקים מה־<bdi
+                >Claude Design</bdi
+              >: שינוי עיצובי נעשה קודם שם, ורק אחר כך בקוד.
+            </li>
+          </ul>
+        </section>
+
+        <!-- 7 -->
+        <section id="workflow">
+          <h2>
+            <span class="n">7</span>תהליך העבודה: ממשימה ועד <bdi>merge</bdi>
+          </h2>
+          <div class="flow" aria-label="שלבי העבודה">
+            <span class="step">משימה בספרינט</span><span class="arrow">←</span>
+            <span class="step">ענף <bdi>KAN-&lt;n&gt;-&lt;slug&gt;</bdi></span
+            ><span class="arrow">←</span>
+            <span class="step"><bdi>PR</bdi> עם מפתח <bdi>Jira</bdi></span
+            ><span class="arrow">←</span>
+            <span class="step"><bdi>CI</bdi> + ריוויו</span
+            ><span class="arrow">←</span>
+            <span class="step"><bdi>merge</bdi></span>
+          </div>
+          <ol>
+            <li>
+              <b>לוקחים משימה.</b> ב־<a
+                href="https://almoglavi29.atlassian.net/browse/KAN"
+                ><bdi>Jira</bdi></a
+              >, בספרינט הפעיל, משייכים לעצמכם משימה ומעבירים ל־<bdi
+                >In Progress</bdi
+              >. קוראים את קריטריוני הקבלה ואת הסעיפים ב־<bdi>REQUIREMENTS</bdi>
+              ו־<bdi>DESIGN</bdi> שהמשימה מפנה אליהם. אם המשימה כוללת מסך,
+              פותחים אותו ב־<a
+                href="https://claude.ai/artifact/TZheWo4chpeyaskP9gLxi3"
+                >קובץ העיצוב ב־<bdi>Claude Design</bdi></a
+              >. זה מה שהמסך צריך להיות.
+            </li>
+            <li>
+              <b>פותחים ענף</b> מ־<code>main</code> מעודכן. שם הענף: מפתח ה־<bdi
+                >Jira</bdi
+              >
+              ותיאור קצר באנגלית עם מקפים.
+              <pre><code>git checkout main && git pull
+git checkout -b KAN-23-login-form</code></pre>
+            </li>
+            <li>
+              <b>כותבים קוד וטסטים,</b> ומריצים מקומית <code>pnpm lint</code>,
+              <code>pnpm test</code>, <code>pnpm build</code>. עושים
+              <bdi>commit</bdi> קטנים עם הודעות ברורות.
+              <pre><code>git add .
+git commit -m "feat(auth): add login form with zod validation"
+git push -u origin KAN-23-login-form</code></pre>
+            </li>
+            <li>
+              <b>פותחים <bdi>Pull Request</bdi></b> ל־<code>main</code>. התבנית
+              נטענת לבד: מה ה־<bdi>PR</bdi> עושה, מפתח ה־<bdi>Jira</bdi>
+              (<code>KAN-23</code>), וצ׳קליסט. מפתח ה־<bdi>Jira</bdi> בשם הענף
+              ובתיאור מקשר את ה־<bdi>PR</bdi> למשימה ב־<bdi>Jira</bdi> אוטומטית.
+              אם המשימה נוגעת בשני הריפוזיטוריז, פותחים <bdi>PR</bdi> בכל אחד.
+            </li>
+            <li>
+              <b>בדיקות אוטומטיות וריוויו.</b>
+              <ul>
+                <li>
+                  <bdi>GitHub Actions</bdi> מריץ:
+                  <bdi>install → lint → prettier → test → build</bdi>. הכול חייב
+                  להיות ירוק.
+                </li>
+                <li>
+                  <bdi>Vercel</bdi> מעלה גרסת <bdi>Preview</bdi> עם לינק משלה,
+                  כדי שאפשר לראות את השינוי באוויר.
+                </li>
+                <li>
+                  <bdi>CodeRabbit</bdi> (בוט <bdi>AI</bdi>) משאיר הערות. קוראים,
+                  מתקנים או עונים למה לא.
+                </li>
+                <li>
+                  אחד הלידים (לפי <code>CODEOWNERS</code>) עושה ריוויו ומאשר. כל
+                  <bdi>commit</bdi> חדש מבטל אישור קודם.
+                </li>
+              </ul>
+            </li>
+            <li>
+              <b><bdi>Merge</bdi>.</b> אחרי אישור, <bdi>CI</bdi> ירוק וכל השיחות
+              סגורות, <b>אתם</b> (כותבי ה־<bdi>PR</bdi>) עושים <bdi>merge</bdi>.
+              המיזוג ל־<code>main</code> מעלה לפרודקשן אוטומטית. מעבירים את
+              המשימה ב־<bdi>Jira</bdi> ל־<bdi>Done</bdi>.
+            </li>
+          </ol>
+          <div class="note">
+            <b>מתי משימה נחשבת גמורה (<bdi>Definition of Done</bdi>)</b>
+            קריטריוני הקבלה מכוסים בטסטים או נבדקו ידנית ונכתבו ב־<bdi>PR</bdi>;
+            ה־<bdi>CI</bdi> ירוק; היה ריוויו; המסכים עובדים עם מקלדת בלבד ונראים
+            טוב ברוחב <bdi>360px</bdi>.
+          </div>
+        </section>
+
+        <!-- 8 -->
+        <section id="tests">
+          <h2><span class="n">8</span>טסטים</h2>
+          <div class="table-wrap">
+            <table>
+              <tr>
+                <th>סוג</th>
+                <th>איפה</th>
+                <th>פקודה</th>
+                <th>מה זה בודק</th>
+              </tr>
+              <tr>
+                <td>יחידה וקומפוננטות</td>
+                <td>אתר</td>
+                <td>
+                  <code>pnpm test</code><br /><code>pnpm test:watch</code>
+                </td>
+                <td>
+                  <bdi>Vitest</bdi> + <bdi>Testing Library</bdi> בסביבת
+                  <bdi>jsdom</bdi>: קומפוננטות, טפסים, ה־<bdi>router</bdi>, לקוח
+                  ה־<bdi>API</bdi>, וכלל ה־<bdi>RTL</bdi>
+                </td>
+              </tr>
+              <tr>
+                <td><bdi>API</bdi> (אינטגרציה)</td>
+                <td>שרת</td>
+                <td>
+                  <code>pnpm test</code><br /><code>pnpm test:watch</code>
+                </td>
+                <td>
+                  <bdi>Vitest</bdi> + <bdi>supertest</bdi> שולחים בקשות אמיתיות
+                  לאפליקציה, מול מסד נתונים זמני בזיכרון
+                  (<bdi>mongodb-memory-server</bdi>). לא נוגע במסד האמיתי, ולא
+                  צריך <code>.env</code> עם סודות
+                </td>
+              </tr>
+              <tr>
+                <td><bdi>Policies</bdi></td>
+                <td>שרת</td>
+                <td><code>pnpm test</code></td>
+                <td>כל שורה בטבלת ההרשאות כטסט נפרד</td>
+              </tr>
+              <tr>
+                <td><bdi>E2E</bdi> (קצה לקצה)</td>
+                <td>על ה־<bdi>Preview</bdi></td>
+                <td><span class="tag">עוד לא קיים</span></td>
+                <td>
+                  <bdi>Playwright</bdi> יפתח דפדפן אמיתי ויעבור על התהליכים
+                  המרכזיים (הרשמה, מציאת חומר, סימון היעדרות). יתווסף במשימה
+                  <bdi>S-8.4</bdi>, והפקודה תתועד כאן
+                </td>
+              </tr>
+            </table>
+          </div>
+          <p>
+            מוסכמה: שם הטסט מפנה לדרישה שהוא בודק, למשל
+            <code>it('R-22.2 does not flag missing reports', ...)</code>. ככה
+            רואים מיד מה נשבר.
+          </p>
+          <p>
+            לפני כל <bdi>push</bdi>, כדאי להריץ את מה שה־<bdi>CI</bdi> יריץ:
+          </p>
+          <pre><code>pnpm lint && pnpm format:check && pnpm test && pnpm build</code></pre>
+        </section>
+
+        <!-- 9 -->
+        <section id="stack">
+          <h2><span class="n">9</span>מילון הטכנולוגיות</h2>
+          <p>
+            רואים משהו בפעם הראשונה? כאן יש הסבר של שתי שורות ולינק להתחלה. לא
+            צריך ללמוד הכול מראש: קראו את מה שהמשימה שלכם צריכה.
+          </p>
+
+          <h3>שפה וכלי בסיס</h3>
+          <div class="cards">
+            <div class="card">
+              <h4><bdi>Git</bdi> &amp; <bdi>GitHub</bdi></h4>
+              <p>
+                <bdi>Git</bdi> שומר היסטוריה של כל שינוי בקוד ומאפשר לעבוד
+                בענפים במקביל. <bdi>GitHub</bdi> הוא האתר שמחזיק את הריפוזיטוריז
+                ושבו עושים <bdi>Pull Requests</bdi> וריוויו.
+              </p>
+              <div class="links">
+                <a
+                  href="https://docs.github.com/en/get-started/start-your-journey/hello-world"
+                  >מדריך <bdi>Hello World</bdi></a
+                >
+                ·
+                <a href="https://learngitbranching.js.org/"
+                  >תרגול ענפים אינטראקטיבי</a
+                >
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>Node.js</bdi></h4>
+              <p>
+                סביבה שמריצה <bdi>JavaScript</bdi> מחוץ לדפדפן. עליה רץ השרת,
+                וגם כל כלי הפיתוח (<bdi>Vite</bdi>, <bdi>ESLint</bdi>, טסטים).
+              </p>
+              <div class="links">
+                <a
+                  href="https://nodejs.org/en/learn/getting-started/introduction-to-nodejs"
+                  >מבוא רשמי</a
+                >
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>pnpm</bdi></h4>
+              <p>
+                מנהל חבילות: מתקין את הספריות שהפרויקט צריך (לפי
+                <code>package.json</code>) ומריץ סקריפטים (<code>pnpm dev</code
+                >). מהיר וחסכוני יותר מ־<bdi>npm</bdi>. משתמשים רק בו, כדי שקובץ
+                ה־<bdi>lock</bdi> יישאר אחד.
+              </p>
+              <div class="links">
+                <a href="https://pnpm.io/motivation">למה <bdi>pnpm</bdi></a> ·
+                <a href="https://pnpm.io/cli/install">פקודות</a>
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>TypeScript</bdi></h4>
+              <p>
+                <bdi>JavaScript</bdi> עם טיפוסים. העורך והקומפיילר תופסים טעויות
+                (כמו שדה שלא קיים) לפני שהקוד רץ. כל הקוד אצלנו
+                ב־<code>.ts</code>/<code>.tsx</code>.
+              </p>
+              <div class="links">
+                <a
+                  href="https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html"
+                  ><bdi>TypeScript</bdi> ב־5 דקות</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <h3>צד לקוח (אתר)</h3>
+          <div class="cards">
+            <div class="card">
+              <h4><bdi>React 19</bdi></h4>
+              <p>
+                ספרייה לבניית ממשק מקומפוננטות: כל חלק במסך הוא פונקציה שמקבלת
+                נתונים ומחזירה <bdi>JSX</bdi> (משהו שנראה כמו <bdi>HTML</bdi>).
+              </p>
+              <div class="links">
+                <a href="https://react.dev/learn">react.dev/learn</a>
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>Vite</bdi></h4>
+              <p>
+                שרת הפיתוח וכלי הבנייה. מרענן את הדפדפן מיד כששומרים קובץ, ובונה
+                גרסת פרודקשן מכווצת עם <code>pnpm build</code>.
+              </p>
+              <div class="links">
+                <a href="https://vite.dev/guide/">מדריך <bdi>Vite</bdi></a>
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>React Router 7</bdi></h4>
+              <p>
+                קובע איזה מסך מוצג לפי הכתובת (<code>/mentors</code>,
+                <code>/dashboard</code>) בלי לטעון את הדף מחדש.
+              </p>
+              <div class="links">
+                <a href="https://reactrouter.com/start/library/installation"
+                  >מדריך (<bdi>library mode</bdi>)</a
+                >
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>Tailwind CSS</bdi></h4>
+              <p>
+                במקום לכתוב קבצי <bdi>CSS</bdi>, כותבים מחלקות קטנות ישירות על
+                האלמנט: <code>p-4 rounded-lg bg-surface</code>. אצלנו רק מחלקות
+                לוגיות (ראו סעיף 6).
+              </p>
+              <div class="links">
+                <a
+                  href="https://tailwindcss.com/docs/styling-with-utility-classes"
+                  >איך זה עובד</a
+                >
+                ·
+                <a href="https://tailwindcss.com/docs/padding"
+                  >דוגמה: <bdi>padding</bdi></a
+                >
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>shadcn/ui</bdi> + <bdi>Radix</bdi></h4>
+              <p>
+                <bdi>shadcn</bdi> מעתיק לפרויקט קוד של קומפוננטות מוכנות (כפתור,
+                דיאלוג, טאבים) שאפשר לשנות. מתחת הן בנויות על <bdi>Radix</bdi>,
+                שדואג לנגישות: פוקוס, מקלדת, קוראי מסך.
+              </p>
+              <div class="links">
+                <a href="https://ui.shadcn.com/docs">shadcn/ui</a> ·
+                <a href="https://ui.shadcn.com/docs/rtl/vite"
+                  >מדריך <bdi>RTL</bdi></a
+                >
+                ·
+                <a
+                  href="https://www.radix-ui.com/primitives/docs/overview/introduction"
+                  >Radix</a
+                >
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>TanStack Query</bdi></h4>
+              <p>
+                מנהל נתונים שמגיעים מהשרת: טעינה, שגיאה, שמירה במטמון ורענון.
+                במקום <code>useEffect</code> + <code>useState</code> לכל קריאה,
+                כותבים <code>useQuery</code>.
+              </p>
+              <div class="links">
+                <a
+                  href="https://tanstack.com/query/latest/docs/framework/react/overview"
+                  >סקירה</a
+                >
+                ·
+                <a
+                  href="https://tanstack.com/query/latest/docs/framework/react/quick-start"
+                  >התחלה מהירה</a
+                >
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>axios</bdi></h4>
+              <p>
+                ספרייה לשליחת בקשות <bdi>HTTP</bdi>. יש לנו מופע אחד מוגדר מראש
+                ב־<code>src/lib/api.ts</code>.
+              </p>
+              <div class="links">
+                <a href="https://axios-http.com/docs/intro">תיעוד</a>
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>react-hook-form</bdi></h4>
+              <p>
+                מנהל טפסים: ערכי השדות, שגיאות ושליחה, בלי רינדור מיותר. מתחבר
+                ל־<bdi>zod</bdi> דרך <bdi>@hookform/resolvers</bdi>.
+              </p>
+              <div class="links">
+                <a href="https://react-hook-form.com/get-started">התחלה</a>
+              </div>
+            </div>
+          </div>
+
+          <h3>צד שרת ונתונים</h3>
+          <div class="cards">
+            <div class="card">
+              <h4><bdi>Express 5</bdi></h4>
+              <p>
+                ספריית שרת ל־<bdi>Node</bdi>: מגדירים נתיבים (<code
+                  >app.get('/api/v1/health', ...)</code
+                >) ושרשרת <bdi>middleware</bdi>, פונקציות שכל בקשה עוברת בדרך
+                (אימות, הרשאה, בדיקת קלט).
+              </p>
+              <div class="links">
+                <a href="https://expressjs.com/en/starter/hello-world.html"
+                  >Hello world</a
+                >
+                ·
+                <a href="https://expressjs.com/en/guide/using-middleware.html"
+                  >מה זה <bdi>middleware</bdi></a
+                >
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>zod</bdi></h4>
+              <p>
+                מגדירים פעם אחת איך נתונים צריכים להיראות, ומקבלים גם בדיקה בזמן
+                ריצה וגם טיפוס <bdi>TypeScript</bdi>. משמש גם לבדיקת משתני
+                הסביבה בהפעלה.
+              </p>
+              <div class="links">
+                <a href="https://zod.dev/basics">zod.dev</a>
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>MongoDB</bdi> + <bdi>Mongoose</bdi></h4>
+              <p>
+                <bdi>MongoDB</bdi> שומר "מסמכים" דמויי <bdi>JSON</bdi> בתוך
+                קולקציות (<code>users</code>, <code>materials</code>).
+                <bdi>Mongoose</bdi> מוסיף מעליו מודלים עם סכמה, אינדקסים
+                ושאילתות נוחות.
+              </p>
+              <div class="links">
+                <a href="https://www.mongodb.com/docs/manual/introduction/"
+                  >מבוא ל־MongoDB</a
+                >
+                · <a href="https://mongoosejs.com/docs/index.html">Mongoose</a>
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>MongoDB Atlas</bdi></h4>
+              <p>
+                השירות בענן שמריץ לנו את <bdi>MongoDB</bdi> (חבילת
+                <bdi>M0</bdi> החינמית). מוצפן, ומחייב חיבור מאובטח
+                (<code>mongodb+srv</code>).
+              </p>
+              <div class="links">
+                <a href="https://www.mongodb.com/docs/atlas/getting-started/"
+                  >Getting started</a
+                >
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>Cloudinary</bdi></h4>
+              <p>
+                אחסון קבצים ותמונות בענן. חומרי לימוד נשמרים כפרטיים ונגישים רק
+                דרך קישור חתום ל־5 דקות; תמונות פרופיל מוקטנות אוטומטית.
+              </p>
+              <div class="links">
+                <a
+                  href="https://cloudinary.com/documentation/programmable_media_overview"
+                  >סקירה</a
+                >
+                ·
+                <a
+                  href="https://cloudinary.com/documentation/upload_images#authenticated_requests"
+                  >העלאה חתומה</a
+                >
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>JWT</bdi> בעוגיות <bdi>httpOnly</bdi></h4>
+              <p>
+                אחרי התחברות השרת שולח טוקן קצר (15 דקות) וטוקן רענון (30 יום)
+                בעוגיות שקוד <bdi>JavaScript</bdi> לא יכול לקרוא, וזה מגן מגניבת
+                סשן. הדפדפן שולח אותן לבד.
+              </p>
+              <div class="links">
+                <a href="https://jwt.io/introduction">מה זה <bdi>JWT</bdi></a> ·
+                <a
+                  href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies"
+                  >עוגיות (<bdi>MDN</bdi>)</a
+                >
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>Nodemailer</bdi> + <bdi>Gmail</bdi></h4>
+              <p>
+                שליחת מיילים (אימות, איפוס סיסמה, הזמנות) מחשבון ה־<bdi
+                  >Gmail</bdi
+                >
+                של המועדון, עם סיסמת אפליקציה. בפיתוח המיילים מודפסים לטרמינל
+                במקום להישלח.
+              </p>
+              <div class="links">
+                <a href="https://nodemailer.com/about/">nodemailer</a> ·
+                <a href="https://support.google.com/accounts/answer/185833"
+                  >סיסמת אפליקציה</a
+                >
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>Swagger</bdi> / <bdi>OpenAPI</bdi></h4>
+              <p>
+                תיעוד אוטומטי של כל האנדפוינטים, שנוצר מסכמות ה־<bdi>zod</bdi>.
+                יהיה זמין ב־<code>/api/docs</code> מקומית וב־<bdi>Preview</bdi>,
+                ושם אפשר גם לנסות כל קריאה.
+              </p>
+              <div class="links">
+                <a href="https://swagger.io/docs/specification/v3_0/about/"
+                  >מה זה <bdi>OpenAPI</bdi></a
+                >
+              </div>
+            </div>
+          </div>
+
+          <h3>איכות, בדיקות ודיפלוי</h3>
+          <div class="cards">
+            <div class="card">
+              <h4><bdi>ESLint</bdi></h4>
+              <p>
+                קורא את הקוד ומתריע על באגים נפוצים ושבירת כללים, כולל כלל
+                ה־<bdi>RTL</bdi> שלנו. <code>pnpm lint</code>.
+              </p>
+              <div class="links">
+                <a href="https://eslint.org/docs/latest/use/getting-started"
+                  >Getting started</a
+                >
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>Prettier</bdi></h4>
+              <p>
+                מפרמט את הקוד אוטומטית (רווחים, מרכאות, שבירת שורות), כך שאף אחד
+                לא מתווכח על סגנון. <code>pnpm format</code>.
+              </p>
+              <div class="links">
+                <a href="https://prettier.io/docs/">תיעוד</a>
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>Husky</bdi> + <bdi>lint-staged</bdi></h4>
+              <p>
+                <bdi>Husky</bdi> מריץ פקודות ברגעים של <bdi>git</bdi> (למשל לפני
+                <bdi>commit</bdi>). <bdi>lint-staged</bdi> מריץ
+                <bdi>Prettier</bdi> ו־<bdi>ESLint</bdi> רק על הקבצים ששיניתם.
+              </p>
+              <div class="links">
+                <a href="https://typicode.github.io/husky/">Husky</a> ·
+                <a href="https://github.com/lint-staged/lint-staged"
+                  >lint-staged</a
+                >
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>Vitest</bdi></h4>
+              <p>
+                הכלי שמריץ את הטסטים בשני הריפוזיטוריז: <code>describe</code>,
+                <code>it</code>, <code>expect</code>. מהיר, ועובד יחד עם
+                <bdi>Vite</bdi>.
+              </p>
+              <div class="links">
+                <a href="https://vitest.dev/guide/">מדריך</a>
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>Testing Library</bdi></h4>
+              <p>
+                בודק קומפוננטות כמו שמשתמש רואה אותן: מחפשים כפתור לפי הטקסט שלו
+                ולוחצים, במקום לבדוק פרטים פנימיים.
+              </p>
+              <div class="links">
+                <a
+                  href="https://testing-library.com/docs/react-testing-library/intro/"
+                  >React Testing Library</a
+                >
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>supertest</bdi> + <bdi>mongodb-memory-server</bdi></h4>
+              <p>
+                <bdi>supertest</bdi> שולח בקשות <bdi>HTTP</bdi> לאפליקציית
+                ה־<bdi>Express</bdi> בתוך הטסט.
+                <bdi>mongodb-memory-server</bdi> מרים <bdi>MongoDB</bdi> זמני
+                בזיכרון, שנמחק בסוף.
+              </p>
+              <div class="links">
+                <a href="https://github.com/ladjs/supertest">supertest</a> ·
+                <a href="https://typegoose.github.io/mongodb-memory-server/"
+                  >mongodb-memory-server</a
+                >
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>Playwright</bdi> <span class="tag">בהמשך</span></h4>
+              <p>
+                מפעיל דפדפן אמיתי ועובר על האתר כמו משתמש: ממלא טפסים, לוחץ
+                ובודק תוצאה.
+              </p>
+              <div class="links">
+                <a href="https://playwright.dev/docs/intro">מבוא</a>
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>GitHub Actions</bdi> (<bdi>CI</bdi>)</h4>
+              <p>
+                על כל <bdi>PR</bdi> מכונה בענן מתקינה ומריצה <bdi>lint</bdi>,
+                פורמט, טסטים ובנייה. ההגדרה
+                ב־<code>.github/workflows/ci.yml</code>.
+              </p>
+              <div class="links">
+                <a
+                  href="https://docs.github.com/en/actions/get-started/understand-github-actions"
+                  >איך זה עובד</a
+                >
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>Vercel</bdi></h4>
+              <p>
+                מארח את האתר ואת ה־<bdi>API</bdi>. כל <bdi>PR</bdi> מקבל כתובת
+                <bdi>Preview</bdi> משלו, ו־<bdi>merge</bdi> ל־<code>main</code>
+                עולה לפרודקשן. השרת רץ שם כפונקציית <bdi>serverless</bdi>.
+              </p>
+              <div class="links">
+                <a href="https://vercel.com/docs/getting-started-with-vercel"
+                  >Getting started</a
+                >
+                ·
+                <a
+                  href="https://vercel.com/docs/deployments/environments#preview-environment-pre-production"
+                  >Preview</a
+                >
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>CodeRabbit</bdi></h4>
+              <p>
+                בוט <bdi>AI</bdi> שעושה ריוויו ראשוני על כל <bdi>PR</bdi> לפי
+                כללי הפרויקט (ב־<code>.coderabbit.yaml</code>). הוא רק מעיר;
+                האישור הוא של ליד.
+              </p>
+              <div class="links">
+                <a href="https://docs.coderabbit.ai/">תיעוד</a>
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>Dependabot</bdi></h4>
+              <p>
+                פותח <bdi>PR</bdi> אוטומטיים לעדכון ספריות, ומתריע על חולשות
+                אבטחה.
+              </p>
+              <div class="links">
+                <a href="https://docs.github.com/en/code-security/dependabot"
+                  >תיעוד</a
+                >
+              </div>
+            </div>
+            <div class="card">
+              <h4><bdi>Jira</bdi></h4>
+              <p>
+                ניהול המשימות והספרינטים. כל משימה היא
+                <code>KAN-&lt;n&gt;</code>, וכשהמפתח מופיע בשם הענף
+                וב־<bdi>PR</bdi>, הקישור ביניהם נוצר לבד.
+              </p>
+              <div class="links">
+                <a href="https://www.atlassian.com/agile/tutorials/sprints"
+                  >מה זה ספרינט</a
+                >
+                ·
+                <a
+                  href="https://support.atlassian.com/jira-software-cloud/docs/reference-issues-in-your-development-work/"
+                  >קישור קוד ל־<bdi>Jira</bdi></a
+                >
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 10 -->
+        <section id="links">
+          <h2><span class="n">10</span>קישורים ומסמכים</h2>
+          <div class="table-wrap">
+            <table>
+              <tr>
+                <th>מה</th>
+                <th>איפה</th>
+                <th>מתי לקרוא</th>
+              </tr>
+              <tr>
+                <td><bdi>REQUIREMENTS</bdi></td>
+                <td>
+                  <a
+                    href="https://github.com/colmandevclub/ColmanDevClub-New-Website/blob/main/docs/specs/REQUIREMENTS.md"
+                    ><code>docs/specs/REQUIREMENTS.md</code></a
+                  >
+                  בריפו של האתר
+                </td>
+                <td>
+                  מה המערכת צריכה לעשות (<bdi>R-xx</bdi>), וטבלת ההרשאות ב־§3
+                </td>
+              </tr>
+              <tr>
+                <td><bdi>DESIGN</bdi></td>
+                <td>
+                  <a
+                    href="https://github.com/colmandevclub/ColmanDevClub-New-Website/blob/main/docs/specs/DESIGN.md"
+                    ><code>docs/specs/DESIGN.md</code></a
+                  >
+                </td>
+                <td>
+                  איך זה בנוי: החלטות (<bdi>T-xx</bdi>), נתיבים, אנדפוינטים,
+                  מודלים
+                </td>
+              </tr>
+              <tr>
+                <td><bdi>TASKS</bdi></td>
+                <td>
+                  <a
+                    href="https://github.com/colmandevclub/ColmanDevClub-New-Website/blob/main/docs/specs/TASKS.md"
+                    ><code>docs/specs/TASKS.md</code></a
+                  >
+                </td>
+                <td>כל המשימות עם קריטריוני קבלה (<bdi>S-x.y</bdi>)</td>
+              </tr>
+              <tr>
+                <td><bdi>RUNBOOK</bdi></td>
+                <td>
+                  עוד לא קיים בריפו. מה שחסר בו מופיע ב־<a
+                    href="https://github.com/colmandevclub/ColmanDevClub-New-Website/blob/main/docs/specs/reconciliation-2026-11-14.md"
+                    ><code>reconciliation-2026-11-14.md</code></a
+                  >
+                  §4
+                </td>
+                <td>משתני סביבה, הצפנה, ונקודות שצריך להיזהר בהן בשירותים</td>
+              </tr>
+              <tr>
+                <td>איך עובדים (<bdi>SDD</bdi>)</td>
+                <td>
+                  <a
+                    href="https://github.com/colmandevclub/ColmanDevClub-New-Website/blob/main/docs/sdd/README.md"
+                    ><code>docs/sdd/</code></a
+                  >: המדריך, דוגמה מלאה (<bdi>R-20.4</bdi>) ותבניות
+                </td>
+                <td>לפני הסטורי הראשון שלכם</td>
+              </tr>
+              <tr>
+                <td><bdi>API docs</bdi> (<bdi>Swagger</bdi>)</td>
+                <td>
+                  <code dir="ltr">/api/docs</code> מקומית וב־<bdi>Preview</bdi>
+                  (כבוי בפרודקשן)
+                </td>
+                <td>כשקוראים לאנדפוינט או מוסיפים אחד (<bdi>T-23</bdi>)</td>
+              </tr>
+              <tr>
+                <td>עיצוב (<bdi>Claude Design</bdi>)</td>
+                <td>
+                  <a href="https://claude.ai/artifact/TZheWo4chpeyaskP9gLxi3"
+                    ><bdi>ColmanDevClub — Website</bdi></a
+                  >
+                </td>
+                <td><b>מקור האמת לממשק.</b> לפני שבונים או משנים מסך</td>
+              </tr>
+              <tr>
+                <td><bdi>Jira</bdi></td>
+                <td>
+                  <a href="https://almoglavi29.atlassian.net/browse/KAN"
+                    >פרויקט <bdi>KAN</bdi></a
+                  >
+                </td>
+                <td>הספרינט והמשימות</td>
+              </tr>
+              <tr>
+                <td><bdi>GitHub</bdi> — אתר</td>
+                <td>
+                  <a
+                    href="https://github.com/colmandevclub/ColmanDevClub-New-Website"
+                    ><bdi>ColmanDevClub-New-Website</bdi></a
+                  >
+                </td>
+                <td>קוד, <bdi>PRs</bdi>, <bdi>README</bdi></td>
+              </tr>
+              <tr>
+                <td><bdi>GitHub</bdi> — שרת</td>
+                <td>
+                  <a
+                    href="https://github.com/colmandevclub/ColmanDevClub-Server"
+                    ><bdi>ColmanDevClub-Server</bdi></a
+                  >
+                </td>
+                <td>קוד, <bdi>PRs</bdi>, <bdi>README</bdi></td>
+              </tr>
+            </table>
+          </div>
+        </section>
+
+        <!-- 11 -->
+        <section id="troubleshooting">
+          <h2><span class="n">11</span>תקלות נפוצות</h2>
+          <details>
+            <summary><code>pnpm: command not found</code></summary>
+            <p>
+              התקינו אותו: <code>npm install -g pnpm@10.32.1</code>. אם החלפתם
+              גרסת <bdi>Node</bdi> עם <bdi>nvm</bdi>, צריך להתקין שוב לגרסה
+              החדשה.
+            </p>
+          </details>
+          <details>
+            <summary>
+              שגיאת <bdi>engines</bdi> / <bdi>Unsupported engine</bdi> בזמן
+              <code>pnpm install</code>
+            </summary>
+            <p>
+              גרסת ה־<bdi>Node</bdi> ישנה מדי. הריצו
+              <code>nvm install 22 && nvm use 22</code> וודאו ש־<code
+                >node --version</code
+              >
+              מראה לפחות <bdi>v22.22.2</bdi>.
+            </p>
+          </details>
+          <details>
+            <summary>
+              השרת לא עולה: <code>Invalid environment variables</code>
+            </summary>
+            <p>
+              הבדיקה של <code>env.ts</code> נכשלה. ההודעה מראה איזה משתנה. בדקו
+              שהעתקתם את <code>.env.example</code> ל־<code>.env</code> ושהערך
+              בפורמט הנכון (לדוגמה, <code>MONGODB_URI</code> חייב להיות כתובת
+              מלאה).
+            </p>
+          </details>
+          <details>
+            <summary>
+              <code>EADDRINUSE: address already in use :::3000</code>
+            </summary>
+            <p>
+              משהו אחר כבר משתמש בפורט. סגרו את התהליך הישן, או שנו את
+              <code>PORT</code> ב־<code>.env</code> ואז גם את
+              <code>DEVELOPMENT.API_TARGET</code> באתר.
+            </p>
+          </details>
+          <details>
+            <summary>
+              באתר, קריאות ל־<code>/api</code> נכשלות עם <bdi>500</bdi> או
+              <bdi>ECONNREFUSED</bdi>
+            </summary>
+            <p>
+              השרת לא רץ, או רץ על פורט אחר. הריצו את השרת (<code
+                >pnpm dev</code
+              >
+              בריפו של השרת) ובדקו את
+              <code>curl http://localhost:3000/api/v1/health</code>.
+            </p>
+          </details>
+          <details>
+            <summary>ה־<bdi>commit</bdi> נחסם על ידי <bdi>Husky</bdi></summary>
+            <p>
+              זה <bdi>lint-staged</bdi> שמצא שגיאת <bdi>lint</bdi>. תקנו את מה
+              שמופיע בטרמינל (הרבה פעמים <code>pnpm lint --fix</code> מספיק),
+              הוסיפו שוב עם <code>git add</code>, ונסו שוב.
+            </p>
+          </details>
+          <details>
+            <summary>
+              ה־<bdi>CI</bdi> נכשל על <code>no-physical-direction</code>
+            </summary>
+            <p>
+              השתמשתם במחלקה כמו <code>ml-2</code> או <code>text-right</code>.
+              החליפו בגרסה הלוגית (טבלה בסעיף 6).
+            </p>
+          </details>
+          <details>
+            <summary>ה־<bdi>CI</bdi> נכשל על <bdi>Prettier</bdi></summary>
+            <p>
+              הריצו <code>pnpm format</code>, עשו
+              <bdi>commit</bdi> ו־<bdi>push</bdi>.
+            </p>
+          </details>
+          <p>
+            תקועים יותר מחצי שעה? כתבו בקבוצת הצוות מה ניסיתם ומה השגיאה
+            המדויקת.
+          </p>
+        </section>
+
+        <!-- 12 -->
+        <section id="done">
+          <h2><span class="n">12</span>צ׳קליסט סיום</h2>
+          <p>אם כל אלה מסומנים, אתם מוכנים למשימה הראשונה:</p>
+          <ul class="checklist">
+            <li>
+              <label
+                ><input type="checkbox" /> יש לי גישה ל־<bdi>GitHub</bdi> (שני
+                הריפוזיטוריז), ל־<bdi>Jira</bdi> ולפרויקט ה־<bdi
+                  >Claude</bdi
+                ></label
+              >
+            </li>
+            <li>
+              <label
+                ><input type="checkbox" /> <code>node --version</code> מראה
+                <bdi>v22</bdi> ו־<code>pnpm --version</code> מראה
+                <bdi>10.32.1</bdi></label
+              >
+            </li>
+            <li>
+              <label
+                ><input type="checkbox" /> השרת רץ ו־<code>/api/v1/health</code>
+                מחזיר <code>ok</code></label
+              >
+            </li>
+            <li>
+              <label
+                ><input type="checkbox" /> האתר רץ
+                ב־<code>localhost:5173</code>, וגם
+                <code>localhost:5173/api/v1/health</code> עובד</label
+              >
+            </li>
+            <li>
+              <label
+                ><input type="checkbox" /> <code>pnpm test</code> עובר בשני
+                הריפוזיטוריז</label
+              >
+            </li>
+            <li>
+              <label
+                ><input type="checkbox" /> קראתי את כללי ה־<bdi>RTL</bdi>,
+                <bdi>zod</bdi>, <bdi>policies</bdi> ופורמט השגיאות</label
+              >
+            </li>
+            <li>
+              <label
+                ><input type="checkbox" /> אני יודע/ת איך לפתוח ענף
+                <code>KAN-&lt;n&gt;-&lt;slug&gt;</code> ו־<bdi>PR</bdi> עם מפתח
+                ה־<bdi>Jira</bdi></label
+              >
+            </li>
+          </ul>
+          <div class="note">
+            <b>מצאתם משהו לא מדויק כאן?</b> זה הזמן הכי טוב לתקן: עדכנו את
+            <code>docs/onboarding.html</code> ב־<bdi>PR</bdi>, כדי שלמי שמגיע
+            אחריכם יהיה קל יותר.
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <footer>
+      <bdi>ColmanDevClub</bdi> · מדריך אונבורדינג · עודכן לאחרונה: נובמבר 2026
+    </footer>
+  </body>
+</html>

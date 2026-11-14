@@ -3,6 +3,10 @@
 Hebrew RTL SPA built with Vite, React 19 and TypeScript. S-0.2 implements the
 frontend foundation from DESIGN §3.1 and §4 (T-01–T-04, R-38.1).
 
+> **New to the team?** Start with the [onboarding guide](docs/onboarding.html) (Hebrew):
+> download it or open it locally in a browser. It covers tool access, running both
+> repos together, folder structure, conventions, the Jira → PR workflow and tests.
+
 ## Local development
 
 Use Node.js 22.22.2+ on the Node 22 LTS line (`.nvmrc`) and pnpm 10.32.1 (pinned in
@@ -26,6 +30,13 @@ are required for this scaffold.
 ```sh
 curl http://localhost:5173/api/v1/health
 ```
+
+> **Known gap (KAN-113 / S-0.21):** the API redirects every plain-HTTP request to
+> `APP_ORIGIN` (308), and this proxy is still HTTP without `X-Forwarded-Proto`, so the
+> command above currently returns a 308. The HTTPS local workflow (Vite on
+> `https://localhost:5173`, `X-Forwarded-Proto: https`, `APP_ORIGIN` set to the browser
+> origin) is described in the [onboarding guide](docs/onboarding.html#setup) and lands
+> with KAN-113.
 
 ## Commands
 
@@ -106,5 +117,6 @@ fallback belong to S-0.4; the API proxy here applies to development.
 ## Docs
 
 - [CLAUDE.md](CLAUDE.md): project rules for people and AI agents
-- Specs: [REQUIREMENTS](docs/specs/REQUIREMENTS.md) · [DESIGN](docs/specs/DESIGN.md) · [TASKS](docs/specs/TASKS.md)
+- Specs: [REQUIREMENTS](docs/specs/REQUIREMENTS.md) · [DESIGN](docs/specs/DESIGN.md) · [TASKS](docs/specs/TASKS.md) · [Reconciliation 2026-11-14](docs/specs/reconciliation-2026-11-14.md)
+- [Onboarding guide](docs/onboarding.html) (Hebrew, open locally in a browser)
 - [How we work (SDD)](docs/sdd/README.md) · [Worked example](docs/sdd/example-R-20.4.md) · [Templates](docs/sdd/templates/)
